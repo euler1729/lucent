@@ -25,11 +25,12 @@ public class AppUser {
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = true)
     private Role role = new Role();
 
     @Column(length = 63)
     private String verificationCode;
-    private boolean verified;
+    private boolean verified = false;
 
     @CreationTimestamp
     private LocalDateTime created;
