@@ -22,7 +22,7 @@ class RoleRepoTest {
     private RoleRepo roleRepo;
 
     @Test
-    public void testCreateRole(){
+    public void testSaveRole(){
 
         Role testRole = new Role();
         testRole.setName("TESTROLE");

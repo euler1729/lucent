@@ -13,7 +13,7 @@ import org.springframework.test.annotation.Rollback;
 import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Rollback(value = false)
+@Rollback(value = true)
 class AppUserRepoTest {
     @Autowired
     private TestEntityManager entityManager;

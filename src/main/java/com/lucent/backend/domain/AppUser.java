@@ -28,8 +28,7 @@ public class AppUser {
     @JoinColumn(nullable = true)
     private Role role = new Role();
 
-    @Column(length = 63)
-    private String verificationCode;
+    private int verificationCode;
     private boolean verified = false;
 
     @CreationTimestamp
