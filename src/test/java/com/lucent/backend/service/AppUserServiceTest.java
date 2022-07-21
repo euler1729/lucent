@@ -4,7 +4,6 @@ import com.lucent.backend.Repo.AppUserRepo;
 import com.lucent.backend.Repo.RoleRepo;
 import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.domain.Role;
-import org.hibernate.mapping.Any;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -51,7 +50,7 @@ class AppUserServiceTest {
         testUser.setEmail("test@email.com");
         testUser.setPassword("password");
 
-        AppUser savedUser = appUserService.registerUser(testUser);
+        AppUser savedUser = appUserService.saveUser(testUser);
         assertEquals(testUser.getEmail(), savedUser.getEmail());
     }
 
@@ -64,4 +63,9 @@ class AppUserServiceTest {
        assertEquals(savedRole.getName(), roleRepo.findRoleByName("TESTROLE").getName());
     }
 
+
+    @Test
+    void testGetRole(){
+        assertEquals(appUserService.getRole("TESTROLE").getName(), "TESTROLE");
+    }
 }

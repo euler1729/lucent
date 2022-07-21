@@ -33,7 +33,7 @@ public class LucentBackendApplication {
 			admin.setName("Admin User");
 			admin.setPassword("admin");
 			admin.setRole(adminRole);
-			appUserService.registerUser(admin);
+			appUserService.saveUser(admin);
 //
 //			AppUser manager = new AppUser();
 //			manager.setEmail("manager@email.com");

@@ -6,7 +6,6 @@ import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.domain.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,8 +58,13 @@ public class AppUserService implements UserDetailsService {
      * @param user An AppUser Object
      * @return Saved AppUser
      */
-    public AppUser registerUser(AppUser user){
+    public AppUser saveUser(AppUser user){
         log.info("Saving new user {}.", user.getName());
+
+        if(user.getName() == null){
+            System.out.println("No name given");
+            return null;
+        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setVerificationCode((int)(Math.random()*(999999-100000+1)+100000 ));  // random number between 100000 and 999999
 
@@ -72,5 +76,9 @@ public class AppUserService implements UserDetailsService {
     public Role saveRole(Role role){
         log.info("Saving new role {}.", role.getName());
         return roleRepo.save(role);
+    }
+
+    public Role getRole(String roleName){
+        return roleRepo.findRoleByName(roleName);
     }
 }
