@@ -38,7 +38,7 @@ public class SecurityConfig {
                 .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET,"/user/login/**", "/token/refresh/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/user/registration/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/user/registration/**", "/user/verify/**").permitAll()
                 .anyRequest().authenticated()
                 .and().authenticationManager(authenticationManager)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

@@ -1,5 +1,6 @@
 package com.lucent.backend.service;
 
+import com.lucent.backend.Notifications.EmailService;
 import com.lucent.backend.Repo.AppUserRepo;
 import com.lucent.backend.Repo.RoleRepo;
 import com.lucent.backend.api.Exception.DuplicateEmailException;
@@ -9,6 +10,7 @@ import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.domain.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,12 +19,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
-
-import static com.lucent.backend.Notifications.UserManagement.sendVerificationCode;
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
 public class AppUserService implements UserDetailsService {
@@ -33,6 +31,7 @@ public class AppUserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final AppUserRepo appUserRepo;
     private final RoleRepo roleRepo;
+    @Autowired private EmailService emailService;
 
     /**
      * Maps built in UserDetailService to our custom user model: AppUserService
@@ -85,8 +84,19 @@ public class AppUserService implements UserDetailsService {
         user.setVerificationCode((int)(Math.random()*(999999-100000+1)+100000 ));  // random number between 100000 and 999999
 
         AppUser savedUser =  appUserRepo.save(user);
-        sendVerificationCode(savedUser, siteurl);
+        emailService.sendVerificationCode(savedUser, siteurl);
         return new AppUserResponse(savedUser);
+    }
+
+    public Boolean verifyUser(String email, int code){
+        AppUser user = appUserRepo.findAppUserByEmail(email);
+        if(code == user.getVerificationCode()){
+            appUserRepo.verifyAppUserByEmail(email);
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     /**

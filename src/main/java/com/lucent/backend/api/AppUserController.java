@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,6 +41,15 @@ public class AppUserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         return ResponseEntity.ok().body(appUserService.getUser((String) auth.getPrincipal()));
+    }
+
+    @PostMapping("/user/verify")
+    public ResponseEntity<Map<String, Boolean>> verifyAccount(@RequestParam int code, @RequestParam String email){
+        Boolean success = appUserService.verifyUser(email, code);
+
+        Map<String, Boolean> successMsg = new HashMap<>();
+        successMsg.put("Success", success);
+        return ResponseEntity.ok().body(successMsg);
     }
 
 
