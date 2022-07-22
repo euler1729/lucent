@@ -2,6 +2,9 @@ package com.lucent.backend.service;
 
 import com.lucent.backend.Repo.AppUserRepo;
 import com.lucent.backend.Repo.RoleRepo;
+import com.lucent.backend.api.Exception.DuplicateEmailException;
+import com.lucent.backend.api.dto.AppUserRequest;
+import com.lucent.backend.api.dto.AppUserResponse;
 import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.domain.Role;
 import lombok.RequiredArgsConstructor;
@@ -55,22 +58,25 @@ public class AppUserService implements UserDetailsService {
      *  - If No name or email was given
      *  - If email already exists
      *  - If password is less than 8 characters
-     * @param user An AppUser Object
+     * @param userRequest A AppUserRequest DTO Object
      * @return Saved AppUser
      */
-    public AppUser saveUser(AppUser user){
-        log.info("Saving new user {}.", user.getName());
+    public AppUserResponse saveUser(AppUserRequest userRequest) throws DuplicateEmailException{
 
-        if(user.getName() == null){
-            System.out.println("No name given");
-            return null;
+        if(appUserRepo.findAppUserByEmail(userRequest.getEmail()) != null){
+            throw new DuplicateEmailException("User with email already exists.");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        AppUser user = new AppUser();
+        user.setName(userRequest.getName());
+        user.setEmail(userRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setRole(this.getRole("ROLE_DONOR"));
         user.setVerificationCode((int)(Math.random()*(999999-100000+1)+100000 ));  // random number between 100000 and 999999
 
         AppUser savedUser =  appUserRepo.save(user);
         sendVerificationCode(savedUser);
-        return savedUser;
+        return new AppUserResponse(savedUser);
     }
 
     public Role saveRole(Role role){

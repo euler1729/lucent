@@ -1,5 +1,6 @@
 package com.lucent.backend;
 
+import com.lucent.backend.api.dto.AppUserRequest;
 import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.domain.Role;
 import com.lucent.backend.service.AppUserService;
@@ -28,12 +29,11 @@ public class LucentBackendApplication {
 			Role managerRole = appUserService.saveRole(new Role(null, "ROLE_MANAGER"));
 			Role donorRole = appUserService.saveRole(new Role(null, "ROLE_DONOR"));
 
-			AppUser admin = new AppUser();
-			admin.setEmail("admin@email.com");
-			admin.setName("Admin User");
-			admin.setPassword("admin");
-			admin.setRole(adminRole);
-			appUserService.saveUser(admin);
+			AppUserRequest donorUser = new AppUserRequest();
+			donorUser.setEmail("admin@email.com");
+			donorUser.setName("Admin User");
+			donorUser.setPassword("admin");
+			appUserService.saveUser(donorUser);
 //
 //			AppUser manager = new AppUser();
 //			manager.setEmail("manager@email.com");
