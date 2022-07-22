@@ -15,21 +15,36 @@ public class TextService {
     private String apiUsername;
     @Value("${smsapipassword}")
     private String apiPassword;
-    public void sendVerficationText(AppUser user)  {
+    @Value("${sendMsg}")
+    private Boolean sendMsg;
+
+    /**
+     * Retrives Phone and Format Message Body
+     * @param user AppUser object
+     */
+    public void sendVerificationText(AppUser user)  {
         String message = String.valueOf(user.getVerificationCode()) + "%20is%20your%20OTP%20verification%20code%20for%20Lucent.";
-        String url = "http://66.45.237.70/api.php?" + "username=" + apiUsername + "&password=" + apiPassword + "&number=" + user.getPhone() + "&message=" + message;
+        sendText(user.getPhone(), message);
+    }
 
-        try {
-            Unirest.setTimeouts(0, 0);
+    /**
+     * Given To and MSG, sends the text
+     * @param to Phone Number Comma Separated
+     * @param msg String Message to send
+     */
+    public void sendText(String to, String msg){
+        if(sendMsg) {
+            String url = "http://66.45.237.70/api.php?" + "username=" + apiUsername + "&password=" + apiPassword + "&number=" + to + "&message=" + msg;
             System.out.println("url = " + url);
-            HttpResponse<String> response = Unirest.post(url)
-                    .header("Content-Type", "application/x-www-form-urlencoded")
-                    .body("")
-                    .asString();
+            try {
+                Unirest.setTimeouts(0, 0);
+                HttpResponse<String> response = Unirest.post(url)
+                        .header("Content-Type", "application/x-www-form-urlencoded")
+                        .body("")
+                        .asString();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
-        catch (Exception ex){
-            ex.printStackTrace();
-        }
-
     }
 }

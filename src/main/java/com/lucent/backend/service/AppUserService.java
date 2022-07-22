@@ -1,6 +1,5 @@
 package com.lucent.backend.service;
 
-import com.lucent.backend.Notifications.EmailService;
 import com.lucent.backend.Notifications.TextService;
 import com.lucent.backend.Repo.AppUserRepo;
 import com.lucent.backend.Repo.RoleRepo;
@@ -96,7 +95,7 @@ public class AppUserService implements UserDetailsService {
 
         AppUser savedUser =  appUserRepo.save(user);
 //        emailService.sendVerificationCode(savedUser, siteurl);
-        textService.sendVerficationText(savedUser);
+        textService.sendVerificationText(savedUser);
         return new AppUserResponse(savedUser);
     }
 
