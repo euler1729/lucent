@@ -53,13 +53,23 @@ public class AppUserService implements UserDetailsService {
     }
 
     /**
+     * Returns User Response DTO given the email
+     * @param email A String literal
+     * @return the user
+     */
+    public AppUserResponse getUserResponse(String email){
+        return new AppUserResponse(appUserRepo.findAppUserByEmail(email));
+    }
+
+    /**
      * Returns user given the email
      * @param email A String literal
      * @return the user
      */
-    public AppUserResponse getUser(String email){
-        return new AppUserResponse(appUserRepo.findAppUserByEmail(email));
+    public AppUser getUser(String email){
+        return appUserRepo.findAppUserByEmail(email);
     }
+
 
     /**
      * Saved the AppUser to the database
@@ -88,6 +98,12 @@ public class AppUserService implements UserDetailsService {
         return new AppUserResponse(savedUser);
     }
 
+    /**
+     * Verify user given email and verification code
+     * @param email User Email
+     * @param code Verification Code
+     * @return True if succeeded False otherwise
+     */
     public Boolean verifyUser(String email, int code){
         AppUser user = appUserRepo.findAppUserByEmail(email);
         if(code == user.getVerificationCode()){
