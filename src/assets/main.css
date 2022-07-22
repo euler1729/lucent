@@ -1,0 +1,32 @@
+/* ./src/main.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background-image: url(https://wallpapershome.com/images/wallpapers/macos-big-sur-1280x720-dark-wwdc-2020-22655.jpg);
+    background-size: cover;
+    background-position: center;
+    /* display: flex; */
+    /* justify-content: center; */
+    /* align-items: center; */
+    flex-direction: column;
+    padding: 10px;
+    width: 100%;
+    height: 100vh;
+
+    @media screen and (max-width: 480px) {
+        padding: 0.8em;
+    }
+}
+
+.dark {
+    width: 100%;
+    color: azure;
+    background-color: rgb(0, 0, 0);
+}
+
+#imgbg {
+    max-width: 100%;
+}
