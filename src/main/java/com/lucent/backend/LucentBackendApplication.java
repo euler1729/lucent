@@ -30,22 +30,10 @@ public class LucentBackendApplication {
 			Role donorRole = appUserService.saveRole(new Role(null, "ROLE_DONOR"));
 
 			AppUserRequest donorUser = new AppUserRequest();
-			donorUser.setEmail("admin@email.com");
+			donorUser.setEmail("fafivif125@galotv.com");
 			donorUser.setName("Admin User");
 			donorUser.setPassword("admin");
-			appUserService.saveUser(donorUser);
-//
-//			AppUser manager = new AppUser();
-//			manager.setEmail("manager@email.com");
-//			manager.setName("Manager User");
-//			manager.setPassword("manager");
-//			appUserService.saveUser(admin);
-//
-//			AppUser donor = new AppUser();
-//			donor.setEmail("manager@email.com");
-//			donor.setName("Manager User");
-//			donor.setPassword("manager");
-//			appUserService.saveUser(admin);
+			appUserService.saveUser(donorUser, "localhost:8080");
 		};
 	}
 }

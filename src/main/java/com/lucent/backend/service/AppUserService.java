@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -53,6 +54,15 @@ public class AppUserService implements UserDetailsService {
     }
 
     /**
+     * Returns user given the email
+     * @param email A String literal
+     * @return the user
+     */
+    public AppUserResponse getUser(String email){
+        return new AppUserResponse(appUserRepo.findAppUserByEmail(email));
+    }
+
+    /**
      * Saved the AppUser to the database
      * Checks
      *  - If No name or email was given
@@ -61,7 +71,7 @@ public class AppUserService implements UserDetailsService {
      * @param userRequest A AppUserRequest DTO Object
      * @return Saved AppUser
      */
-    public AppUserResponse saveUser(AppUserRequest userRequest) throws DuplicateEmailException{
+    public AppUserResponse saveUser(AppUserRequest userRequest, String siteurl) throws DuplicateEmailException{
 
         if(appUserRepo.findAppUserByEmail(userRequest.getEmail()) != null){
             throw new DuplicateEmailException("User with email already exists.");
@@ -75,15 +85,25 @@ public class AppUserService implements UserDetailsService {
         user.setVerificationCode((int)(Math.random()*(999999-100000+1)+100000 ));  // random number between 100000 and 999999
 
         AppUser savedUser =  appUserRepo.save(user);
-        sendVerificationCode(savedUser);
+        sendVerificationCode(savedUser, siteurl);
         return new AppUserResponse(savedUser);
     }
 
+    /**
+     * Save a role | Used by Admin
+     * @param role role object
+     * @return saved role
+     */
     public Role saveRole(Role role){
         log.info("Saving new role {}.", role.getName());
         return roleRepo.save(role);
     }
 
+    /**
+     * Get the Role given a roleName
+     * @param roleName A String literal
+     * @return A Role Object
+     */
     public Role getRole(String roleName){
         return roleRepo.findRoleByName(roleName);
     }
