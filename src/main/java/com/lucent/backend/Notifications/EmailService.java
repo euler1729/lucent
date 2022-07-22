@@ -15,9 +15,14 @@ public class EmailService {
 
     @Autowired private JavaMailSender javaMailSender;
 
+    /**
+     * Sends verification url to the specified email
+     * @param user AppUser object
+     * @param siteurl String object
+     */
     public void sendVerificationCode(AppUser user, String siteurl)  {
 
-        String toAddress = user.getEmail();
+        String toAddress = user.getPhone();
         String fromAddress = "noreply@alvereduan.me";
         String senderName = "Lucent";
         String subject = "Verification Code";
@@ -30,20 +35,9 @@ public class EmailService {
         content = content.replace("[[name]]", user.getName());
         String verifyURL = "http://" + siteurl + "/user/verify?code=" + user.getVerificationCode() + "&email=[[EMAIL]]";
         content = content.replace("[[URL]]", verifyURL);
-        content = content.replace("[[EMAIL]]", user.getEmail());
+        content = content.replace("[[EMAIL]]", user.getPhone());
 
         try{
-//            SimpleMailMessage mailMessage = new SimpleMailMessage();
-//
-//            mailMessage.setFrom(fromAddress);
-//            mailMessage.setTo(toAddress);
-//            mailMessage.setText(content);
-//            mailMessage.setSubject(subject);
-//
-//            log.info("Sending Email");
-//            javaMailSender.send(mailMessage);
-//            log.info("Email sent");
-
             MimeMessage msg = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 

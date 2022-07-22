@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,7 +29,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
-
+    @Value("${JWTSECRET}")
+    private String jwtSecret;
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManager){
         this.authenticationManager = authenticationManager;
@@ -43,11 +45,10 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
         String password = request.getParameter("password");
 
-//        log.info("Email: {}, Password: {}", email, password);
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(phone, password);
         return authenticationManager.authenticate(authenticationToken);
     }
 

@@ -1,6 +1,7 @@
 package com.lucent.backend.service;
 
 import com.lucent.backend.Notifications.EmailService;
+import com.lucent.backend.Notifications.TextService;
 import com.lucent.backend.Repo.AppUserRepo;
 import com.lucent.backend.Repo.RoleRepo;
 import com.lucent.backend.api.Exception.DuplicateEmailException;
@@ -31,43 +32,43 @@ public class AppUserService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final AppUserRepo appUserRepo;
     private final RoleRepo roleRepo;
-    @Autowired private EmailService emailService;
+    @Autowired private TextService textService;
 
     /**
      * Maps built in UserDetailService to our custom user model: AppUserService
      */
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AppUser appUser = appUserRepo.findAppUserByEmail(email);
+    public UserDetails loadUserByUsername(String phone) throws UsernameNotFoundException {
+        AppUser appUser = appUserRepo.findAppUserByPhone(phone);
         if(appUser == null){
             log.error("User not found");
             throw new UsernameNotFoundException("User not found");
         }
         else{
-            log.info("User found {}", email);
+            log.info("User found {}", phone);
         }
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(appUser.getRole().getName()));
-        return new User(appUser.getEmail(), appUser.getPassword(), authorities);
+        return new User(appUser.getPhone(), appUser.getPassword(), authorities);
     }
 
     /**
      * Returns User Response DTO given the email
-     * @param email A String literal
+     * @param phone A String literal
      * @return the user
      */
-    public AppUserResponse getUserResponse(String email){
-        return new AppUserResponse(appUserRepo.findAppUserByEmail(email));
+    public AppUserResponse getUserResponse(String phone){
+        return new AppUserResponse(appUserRepo.findAppUserByPhone(phone));
     }
 
     /**
      * Returns user given the email
-     * @param email A String literal
+     * @param phone A String literal
      * @return the user
      */
-    public AppUser getUser(String email){
-        return appUserRepo.findAppUserByEmail(email);
+    public AppUser getUser(String phone){
+        return appUserRepo.findAppUserByPhone(phone);
     }
 
 
@@ -82,32 +83,33 @@ public class AppUserService implements UserDetailsService {
      */
     public AppUserResponse saveUser(AppUserRequest userRequest, String siteurl) throws DuplicateEmailException{
 
-        if(appUserRepo.findAppUserByEmail(userRequest.getEmail()) != null){
+        if(appUserRepo.findAppUserByPhone(userRequest.getPhone()) != null){
             throw new DuplicateEmailException("User with email already exists.");
         }
 
         AppUser user = new AppUser();
         user.setName(userRequest.getName());
-        user.setEmail(userRequest.getEmail());
+        user.setPhone(userRequest.getPhone());
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setRole(this.getRole("ROLE_DONOR"));
         user.setVerificationCode((int)(Math.random()*(999999-100000+1)+100000 ));  // random number between 100000 and 999999
 
         AppUser savedUser =  appUserRepo.save(user);
-        emailService.sendVerificationCode(savedUser, siteurl);
+//        emailService.sendVerificationCode(savedUser, siteurl);
+        textService.sendVerficationText(savedUser);
         return new AppUserResponse(savedUser);
     }
 
     /**
      * Verify user given email and verification code
-     * @param email User Email
+     * @param phone User phone
      * @param code Verification Code
      * @return True if succeeded False otherwise
      */
-    public Boolean verifyUser(String email, int code){
-        AppUser user = appUserRepo.findAppUserByEmail(email);
+    public Boolean verifyUser(String phone, int code){
+        AppUser user = appUserRepo.findAppUserByPhone(phone);
         if(code == user.getVerificationCode()){
-            appUserRepo.verifyAppUserByEmail(email);
+            appUserRepo.verifyAppUserByPhone(phone);
             return true;
         }
         else{

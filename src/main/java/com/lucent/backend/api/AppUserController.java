@@ -12,6 +12,7 @@ import com.lucent.backend.domain.Role;
 import com.lucent.backend.service.AppUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,11 +37,27 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class AppUserController {
 
     private final AppUserService appUserService;
+
+    @Value("${JWTSECRET}")
+    private String jwtSecret;
+
+    /**
+     * Retrive site url domain
+     * @param request A HttpServletRequest object
+     * @return A sting literal : siteurl
+     */
     private String getSiteURL(HttpServletRequest request) {
         String siteURL = request.getRequestURL().toString();
         return siteURL.replace(request.getServletPath(), "");
     }
 
+    /**
+     * Registers a donor user
+     * @param user a donor user - JSON object
+     * @param request A HttpServletRequest object
+     * @return Saved User Response
+     * @throws DuplicateEmailException if user already exists with given email
+     */
     @PostMapping("/user/registration")
     public ResponseEntity<AppUserResponse> registerDonor(@RequestBody @Valid AppUserRequest user, HttpServletRequest request) throws DuplicateEmailException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/registration").toUriString());
@@ -48,6 +65,12 @@ public class AppUserController {
         return ResponseEntity.created(uri).body(savedUser);
     }
 
+    /**
+     * Returns User Profile
+     * @param request HttpServletRequest object
+     * @param response HttpServletRequest object
+     * @return User's profile as AppUserResponse
+     */
     @GetMapping("/user/profile")
     public ResponseEntity<AppUserResponse> getProfile(HttpServletRequest request, HttpServletResponse response){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -55,22 +78,35 @@ public class AppUserController {
         return ResponseEntity.ok().body(appUserService.getUserResponse((String) auth.getPrincipal()));
     }
 
+    /**
+     * Verify donor user's email
+     * @param code Int value as parameter
+     * @param phone String value as parameter
+     * @return Success Status
+     */
     @PostMapping("/user/verify")
-    public ResponseEntity<Map<String, Boolean>> verifyAccount(@RequestParam int code, @RequestParam String email){
-        Boolean success = appUserService.verifyUser(email, code);
+    public ResponseEntity<Map<String, Boolean>> verifyAccount(@RequestParam int code, @RequestParam String phone){
+        Boolean success = appUserService.verifyUser(phone, code);
 
         Map<String, Boolean> successMsg = new HashMap<>();
         successMsg.put("Success", success);
         return ResponseEntity.ok().body(successMsg);
     }
 
+    /**
+     * Refreshes Access Token given verification token
+     * @param request HttpServletRequest object
+     * @param response HttpServletRequest object
+     * @throws IOException if something goes wrong
+     */
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
-                Algorithm algorithm = Algorithm.HMAC256("secret-passphrase".getBytes());
+                Algorithm algorithm = Algorithm.HMAC256(jwtSecret.getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(refresh_token);
                 String email = decodedJWT.getSubject();
@@ -80,7 +116,7 @@ public class AppUserController {
                 roles.add(user.getRole());
 
                 String access_token = JWT.create()
-                        .withSubject(user.getEmail())
+                        .withSubject(user.getPhone())
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                         .withIssuer(request.getRequestURI().toString())
                         .withClaim("roles", roles.stream().map(Role::getName).collect(Collectors.toList()))

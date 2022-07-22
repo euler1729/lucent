@@ -5,14 +5,17 @@ import com.lucent.backend.domain.Role;
 
 import java.time.LocalDateTime;
 
+/**
+ * AppUser format for outgoing response
+ */
 public class AppUserResponse{
-    public String name, email;
+    public String name, phone;
     public Boolean verified;
     public LocalDateTime created, updated;
     public Role role;
     public AppUserResponse(AppUser user){
         this.name = user.getName();
-        this.email = user.getEmail();
+        this.phone = user.getPhone();
         this.verified = user.isVerified();
         this.created = user.getCreated();
         this.updated = user.getUpdated();

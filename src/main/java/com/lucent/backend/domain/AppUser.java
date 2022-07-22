@@ -28,7 +28,7 @@ public class AppUser {
     private String name;
 
     @Column(nullable = false)
-    private String email;
+    private String phone;
 
     @Column(nullable = false)
     private String password;

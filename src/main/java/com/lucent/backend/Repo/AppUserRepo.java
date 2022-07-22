@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface AppUserRepo extends JpaRepository<AppUser, Long> {
-    AppUser findAppUserByEmail(String email);
+    AppUser findAppUserByPhone(String phone);
 
     @Modifying @Transactional
-    @Query("UPDATE AppUser set verified=TRUE where email=?1")
-    void verifyAppUserByEmail(String email);
+    @Query("UPDATE AppUser set verified=TRUE where phone=?1")
+    void verifyAppUserByPhone(String phone);
 }

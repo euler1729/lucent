@@ -34,7 +34,7 @@ class AppUserServiceTest {
         testUser.setEmail("test@email.com");
         testUser.setPassword("password");
 
-        when(appUserRepo.findAppUserByEmail("test@email.com")).thenReturn(testUser);
+        when(appUserRepo.findAppUserByPhone("test@email.com")).thenReturn(testUser);
         when(appUserRepo.save(any(AppUser.class))).thenReturn(testUser);
 
         Role testRole = new Role();
