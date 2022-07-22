@@ -12,7 +12,16 @@ import java.time.LocalDateTime;
 @Entity @Data @AllArgsConstructor @NoArgsConstructor
 public class Organization {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id
+    @SequenceGenerator(
+            name = "organization_sequence",
+            sequenceName = "organization_sequence",
+            allocationSize = 1
+    )
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "organization_sequence"
+    )
     private Long id;
 
     @Column(nullable = false)
