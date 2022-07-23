@@ -38,11 +38,16 @@ public class SecurityConfig {
                 .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET,"/swagger-ui.html", "/swagger-ui/**", "/api-docs/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/user/login/**", "/token/refresh/**", "/org/published/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/user/login/**", "/token/refresh/**", "/org/published/**", "/membership/approved/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/registration/**", "/user/verify/**", "/org/registration/**").permitAll()
+
                 .antMatchers(HttpMethod.POST, "/org/publish/**").hasAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET, "/org/all/**").hasAuthority("ROLE_ADMIN")
-                .antMatchers(HttpMethod.PUT, "/org/update/**").hasAuthority("ROLE_MANAGER")
+
+                .antMatchers(HttpMethod.GET, "/membership/unapproved/**").hasAuthority("ROLE_MANAGER")
+                .antMatchers(HttpMethod.PUT, "/org/update/**", "/membership/approve/**").hasAuthority("ROLE_MANAGER")
+
+                .antMatchers(HttpMethod.POST, "/membership/request").hasAuthority("ROLE_DONOR")
                 .anyRequest().authenticated()
                 .and().authenticationManager(authenticationManager)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
