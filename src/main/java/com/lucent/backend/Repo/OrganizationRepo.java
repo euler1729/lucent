@@ -23,4 +23,8 @@ public interface OrganizationRepo extends PagingAndSortingRepository<Organizatio
     @Modifying @Transactional
     @Query("UPDATE Organization set description=:description ,autoApprove=:autoApprove, requireCode=:requireCode, requireNID=:requireNID where id=:id")
     void updateOrg(String description, Boolean autoApprove, Boolean requireCode, Boolean requireNID, Long id);
+
+    @Modifying @Transactional
+    @Query("UPDATE Organization set balance=:balance where id=:id")
+    void setBalance(Double balance, Long id);
 }

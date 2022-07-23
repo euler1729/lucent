@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
-@Data
-@AllArgsConstructor @NoArgsConstructor
+@Data @AllArgsConstructor @NoArgsConstructor
 public class MembershipRequest {
     @NotNull(message = "Must enter an organization id.")
     public Long organizationId;

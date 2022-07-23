@@ -47,7 +47,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/membership/unapproved/**").hasAuthority("ROLE_MANAGER")
                 .antMatchers(HttpMethod.PUT, "/org/update/**", "/membership/approve/**").hasAuthority("ROLE_MANAGER")
 
-                .antMatchers(HttpMethod.POST, "/membership/request").hasAuthority("ROLE_DONOR")
+                .antMatchers(HttpMethod.POST, "/membership/request", "/donate").hasAuthority("ROLE_DONOR")
                 .anyRequest().authenticated()
                 .and().authenticationManager(authenticationManager)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
