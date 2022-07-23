@@ -1,7 +1,11 @@
 package com.lucent.backend.service;
 
+import com.lucent.backend.Notifications.TextService;
 import com.lucent.backend.Repo.AppUserRepo;
 import com.lucent.backend.Repo.RoleRepo;
+import com.lucent.backend.api.Exception.DuplicatePhoneException;
+import com.lucent.backend.api.dto.AppUserRequest;
+import com.lucent.backend.api.dto.AppUserResponse;
 import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.domain.Role;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,13 +32,13 @@ class AppUserServiceTest {
 
 
     @BeforeEach
-    void setRoleRepo(){
+    void setStubs(){
         AppUser testUser = new AppUser();
         testUser.setName("test user");
-        testUser.setEmail("test@email.com");
+        testUser.setPhone("111111111");
         testUser.setPassword("password");
 
-        when(appUserRepo.findAppUserByPhone("test@email.com")).thenReturn(testUser);
+        when(appUserRepo.findAppUserByPhone("111111111")).thenReturn(testUser);
         when(appUserRepo.save(any(AppUser.class))).thenReturn(testUser);
 
         Role testRole = new Role();
@@ -44,14 +48,33 @@ class AppUserServiceTest {
     }
 
     @Test
-    void testRegisterUser(){
-        AppUser testUser = new AppUser();
-        testUser.setName("test user");
-        testUser.setEmail("test@email.com");
-        testUser.setPassword("password");
+    void testGetUserResponse(){
+        AppUserResponse appUserResponse = appUserService.getUserResponse("111111111");
+        assertEquals(appUserResponse.name, appUserRepo.findAppUserByPhone("111111111").getName());
+    }
 
-//        AppUser savedUser = appUserService.saveUser(testUser);
-//        assertEquals(testUser.getEmail(), savedUser.getEmail());
+    @Test
+    void testGetUser(){
+        AppUser appUser = appUserService.getUser("111111111");
+        assertEquals(appUser.getName(), appUserRepo.findAppUserByPhone("111111111").getName());
+    }
+
+
+    @Test
+    void testSaveUser()  {
+
+        AppUserRequest appUserRequest = new AppUserRequest();
+        appUserRequest.setName("test user");
+        appUserRequest.setPhone("111111110");
+        appUserRequest.setPassword("password");
+
+        Role role = new Role(0L, "TESTROLE");
+        try {
+            AppUserResponse appUserResponse = appUserService.saveUser(appUserRequest, role, "test");
+            assertEquals(appUserResponse.name, appUserRepo.findAppUserByPhone("111111111").getName());;
+        } catch (DuplicatePhoneException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test

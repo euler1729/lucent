@@ -9,6 +9,12 @@ import com.lucent.backend.api.dto.OrganizationResponse;
 import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.service.AppUserService;
 import com.lucent.backend.service.OrganizationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
 import java.nio.file.AccessDeniedException;
@@ -27,12 +32,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Data
+@Data @AllArgsConstructor
 class OrganizationRegistrationForm{
     private String phone, name, password, orgName, orgDescription;
 }
 
-@Data
+@Data @AllArgsConstructor
 class OrganizationUpdateForm{
     private String description;
     Boolean autoApprove, requireNID, requireCode;
@@ -61,8 +66,15 @@ public class OrganizationController {
      * @return Saved User Response
      * @throws DuplicatePhoneException if user already exists with given email
      */
+    @Operation(summary = "Register Organization")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns profile",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = OrganizationResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "Duplicate Phone Number"),
+    })
     @PostMapping("/org/registration")
-    public ResponseEntity<OrganizationResponse> registerDonor(@RequestBody @Valid OrganizationRegistrationForm form, HttpServletRequest request) throws DuplicatePhoneException {
+    public ResponseEntity<OrganizationResponse> registerOrg(@RequestBody @Valid OrganizationRegistrationForm form, HttpServletRequest request) throws DuplicatePhoneException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/org/registration").toUriString());
 
         AppUserRequest appUserRequest = new AppUserRequest();
@@ -87,6 +99,8 @@ public class OrganizationController {
      * @param sortBy Sort By field
      * @return Paged Published Organizations
      */
+    @Operation(summary = "Published Organizations")
+    @ApiResponse(responseCode = "200", description = "Returns Published Organizations | Open for all")
     @GetMapping("/org/published")
     public ResponseEntity<List<OrganizationResponse>> getPublishedOrg(
             @RequestParam(defaultValue = "0") Integer page,
@@ -103,6 +117,8 @@ public class OrganizationController {
      * @param sortBy Sort By field
      * @return Paged All Organizations
      */
+    @Operation(summary = "All Organizations")
+    @ApiResponse(responseCode = "200", description = "Returns Published Organizations | Open for admin only")
     @GetMapping("/org/all")
     public ResponseEntity<List<OrganizationResponse>> getAllOrg(
             @RequestParam(defaultValue = "0") Integer page,
@@ -118,6 +134,8 @@ public class OrganizationController {
      * @return Status
      * @throws ResourceNotFound if id is invalid
      */
+    @Operation(summary = "Publishes Organizations")
+    @ApiResponse(responseCode = "200", description = "Publishes Organizations | Open for admin only")
     @PostMapping("/org/publish/{id}")
     public ResponseEntity<Map<String, Boolean>> publishOrg(@PathVariable Long id) throws ResourceNotFound {
         Map<String, Boolean> status = new HashMap<>();
@@ -133,6 +151,8 @@ public class OrganizationController {
      * @throws ResourceNotFound if id is invalid
      * @throws AccessDeniedException if requesting user is not the manager of the organization
      */
+    @Operation(summary = "Updates Organizations")
+    @ApiResponse(responseCode = "200", description = "Updates Organizations | Open for manager only")
     @PutMapping("/org/update/{id}")
     public ResponseEntity<Map<String, Boolean>> updateOrg(@PathVariable Long id, @RequestBody OrganizationUpdateForm form) throws ResourceNotFound, AccessDeniedException {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

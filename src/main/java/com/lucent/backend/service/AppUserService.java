@@ -78,7 +78,7 @@ public class AppUserService implements UserDetailsService {
      *  - If email already exists
      *  - If password is less than 8 characters
      * @param userRequest A AppUserRequest DTO Object
-     * @param Role A AppUserRequest DTO Object
+     * @param role A AppUserRequest DTO Object
      * @return Saved AppUser
      */
     public AppUserResponse saveUser(AppUserRequest userRequest, Role role, String siteurl) throws DuplicatePhoneException {

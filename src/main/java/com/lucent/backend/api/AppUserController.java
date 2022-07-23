@@ -10,6 +10,11 @@ import com.lucent.backend.api.dto.AppUserResponse;
 import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.domain.Role;
 import com.lucent.backend.service.AppUserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -58,6 +63,14 @@ public class AppUserController {
      * @return Saved User Response
      * @throws DuplicatePhoneException if user already exists with given email
      */
+    @Operation(summary = "Register a donor")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successful Registration",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AppUserResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "Phone already exists",
+                    content = @Content),
+    })
     @PostMapping("/user/registration")
     public ResponseEntity<AppUserResponse> registerDonor(@RequestBody @Valid AppUserRequest user, HttpServletRequest request) throws DuplicatePhoneException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/registration").toUriString());
@@ -71,10 +84,16 @@ public class AppUserController {
      * @param response HttpServletRequest object
      * @return User's profile as AppUserResponse
      */
+    @Operation(summary = "Profile information")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns profile",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = AppUserResponse.class)) }),
+            @ApiResponse(responseCode = "403", description = "Invalid token"),
+    })
     @GetMapping("/user/profile")
     public ResponseEntity<AppUserResponse> getProfile(HttpServletRequest request, HttpServletResponse response){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
         return ResponseEntity.ok().body(appUserService.getUserResponse((String) auth.getPrincipal()));
     }
 
@@ -84,6 +103,8 @@ public class AppUserController {
      * @param phone String value as parameter
      * @return Success Status
      */
+    @Operation(summary = "Verify phone number")
+    @ApiResponse(responseCode = "200", description = "Returns status true")
     @PostMapping("/user/verify")
     public ResponseEntity<Map<String, Boolean>> verifyAccount(@RequestParam int code, @RequestParam String phone){
         Boolean success = appUserService.verifyUser(phone, code);
@@ -99,6 +120,8 @@ public class AppUserController {
      * @param response HttpServletRequest object
      * @throws IOException if something goes wrong
      */
+    @Operation(summary = "Refresh Access token")
+    @ApiResponse(responseCode = "200", description = "Refreshed Access token")
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
