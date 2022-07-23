@@ -37,8 +37,9 @@ public class SecurityConfig {
         http
                 .addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,"/user/login/**", "/token/refresh/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/user/login/**", "/token/refresh/**", "/org/published/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/registration/**", "/user/verify/**", "/org/registration/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/org/publish/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and().authenticationManager(authenticationManager)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

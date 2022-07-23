@@ -4,7 +4,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lucent.backend.api.Exception.DuplicateEmailException;
+import com.lucent.backend.api.Exception.DuplicatePhoneException;
 import com.lucent.backend.api.dto.AppUserRequest;
 import com.lucent.backend.api.dto.AppUserResponse;
 import com.lucent.backend.domain.AppUser;
@@ -56,10 +56,10 @@ public class AppUserController {
      * @param user a donor user - JSON object
      * @param request A HttpServletRequest object
      * @return Saved User Response
-     * @throws DuplicateEmailException if user already exists with given email
+     * @throws DuplicatePhoneException if user already exists with given email
      */
     @PostMapping("/user/registration")
-    public ResponseEntity<AppUserResponse> registerDonor(@RequestBody @Valid AppUserRequest user, HttpServletRequest request) throws DuplicateEmailException {
+    public ResponseEntity<AppUserResponse> registerDonor(@RequestBody @Valid AppUserRequest user, HttpServletRequest request) throws DuplicatePhoneException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/registration").toUriString());
         AppUserResponse savedUser = appUserService.saveUser(user, this.getSiteURL(request));
         return ResponseEntity.created(uri).body(savedUser);

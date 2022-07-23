@@ -1,6 +1,7 @@
 package com.lucent.backend.api;
 
-import com.lucent.backend.api.Exception.DuplicateEmailException;
+import com.lucent.backend.api.Exception.DuplicatePhoneException;
+import com.lucent.backend.api.Exception.ResourceNotFound;
 import com.lucent.backend.api.dto.AppUserRequest;
 import com.lucent.backend.api.dto.AppUserResponse;
 import com.lucent.backend.api.dto.OrganizationRequest;
@@ -12,14 +13,15 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
+
 @Data
 class OrganizationRegistrationForm{
     private String phone, name, password, orgName, orgDescription;
@@ -46,10 +48,10 @@ public class OrganizationController {
      * @param form OrganizationRegistrationForm object - Consists of phone, name, password, orgName, orgDescription;
      * @param request A HttpServletRequest object
      * @return Saved User Response
-     * @throws DuplicateEmailException if user already exists with given email
+     * @throws DuplicatePhoneException if user already exists with given email
      */
     @PostMapping("/org/registration")
-    public ResponseEntity<OrganizationResponse> registerDonor(@RequestBody @Valid OrganizationRegistrationForm form, HttpServletRequest request) throws DuplicateEmailException {
+    public ResponseEntity<OrganizationResponse> registerDonor(@RequestBody @Valid OrganizationRegistrationForm form, HttpServletRequest request) throws DuplicatePhoneException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/org/registration").toUriString());
 
         AppUserRequest appUserRequest = new AppUserRequest();
@@ -66,4 +68,21 @@ public class OrganizationController {
 
         return ResponseEntity.created(uri).body(savedOrganization);
     }
+
+    /**
+     * Returns all organizations
+     * @param request HttpServletRequest object
+     * @param response HttpServletRequest object
+     * @return User's profile as AppUserResponse
+     */
+    @GetMapping("/org/published")
+    public ResponseEntity<List<OrganizationResponse>> getProfile(HttpServletRequest request, HttpServletResponse response){
+        return ResponseEntity.ok().body(organizationService.getOrganizations());
+    }
+
+    @PostMapping("/org/publish/{id}")
+    public ResponseEntity<Boolean> publishOrg(@PathVariable Long id) throws ResourceNotFound {
+        return ResponseEntity.ok().body(organizationService.publishOrganization(id));
+    }
+
 }

@@ -3,7 +3,7 @@ package com.lucent.backend.service;
 import com.lucent.backend.Notifications.TextService;
 import com.lucent.backend.Repo.AppUserRepo;
 import com.lucent.backend.Repo.RoleRepo;
-import com.lucent.backend.api.Exception.DuplicateEmailException;
+import com.lucent.backend.api.Exception.DuplicatePhoneException;
 import com.lucent.backend.api.dto.AppUserRequest;
 import com.lucent.backend.api.dto.AppUserResponse;
 import com.lucent.backend.domain.AppUser;
@@ -80,10 +80,10 @@ public class AppUserService implements UserDetailsService {
      * @param userRequest A AppUserRequest DTO Object
      * @return Saved AppUser
      */
-    public AppUserResponse saveUser(AppUserRequest userRequest, String siteurl) throws DuplicateEmailException{
+    public AppUserResponse saveUser(AppUserRequest userRequest, String siteurl) throws DuplicatePhoneException {
 
         if(appUserRepo.findAppUserByPhone(userRequest.getPhone()) != null){
-            throw new DuplicateEmailException("User with email already exists.");
+            throw new DuplicatePhoneException("User with email already exists.");
         }
 
         AppUser user = new AppUser();
@@ -99,6 +99,24 @@ public class AppUserService implements UserDetailsService {
         return new AppUserResponse(savedUser);
     }
 
+    /**
+     * Saves an admin user. Used only by the application.
+     * @param userRequest AppUserRequest containing name, phone and password
+     * @return AppUserResponse
+     */
+    public AppUserResponse saveAdminUser(AppUserRequest userRequest) {
+
+        AppUser user = new AppUser();
+        user.setName(userRequest.getName());
+        user.setPhone(userRequest.getPhone());
+        user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        user.setRole(this.getRole("ROLE_ADMIN"));
+        user.setVerificationCode((int)(Math.random()*(999999-100000+1)+100000 ));  // random number between 100000 and 999999
+        user.setVerified(true);
+
+        AppUser savedUser =  appUserRepo.save(user);
+        return new AppUserResponse(savedUser);
+    }
     /**
      * Verify user given email and verification code
      * @param phone User phone

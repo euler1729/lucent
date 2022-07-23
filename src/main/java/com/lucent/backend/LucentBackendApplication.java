@@ -22,6 +22,10 @@ public class LucentBackendApplication {
 		return new BCryptPasswordEncoder();
 	}
 
+	/**
+	 * Saves an admin user while program starts
+	 * @param appUserService AppUserService
+	 */
 	@Bean
 	CommandLineRunner run(AppUserService appUserService){
 		return args -> {
@@ -33,7 +37,7 @@ public class LucentBackendApplication {
 			donorUser.setPhone("01782267068");
 			donorUser.setName("Admin User");
 			donorUser.setPassword("admin");
-			appUserService.saveUser(donorUser, "localhost:8080");
+			appUserService.saveAdminUser(donorUser);
 		};
 	}
 }
