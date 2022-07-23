@@ -16,8 +16,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.nio.file.AccessDeniedException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
@@ -68,6 +70,12 @@ public class OrganizationService {
         return organizationResponses;
     }
 
+    /**
+     * Publishes an organization given id
+     * @param id Organization id
+     * @return True is succeeded
+     * @throws ResourceNotFound if id is invalid
+     */
     public Boolean publishOrganization(Long id) throws ResourceNotFound {
 
         Optional<Organization> org = organizationRepo.findById(id);
@@ -76,7 +84,42 @@ public class OrganizationService {
             return true;
         }
         else{
-            throw new ResourceNotFound("Organization not found if this id.");
+            throw new ResourceNotFound("Organization not found of this id.");
+        }
+    }
+
+    /**
+     * Updates Organization information and returns updated organization as OrganizationResponse
+     * @param id Organization id
+    *  @param managerPhone manager phone
+     * @param Description Organization Description
+     * @param autoApprove Boolean
+     * @param requireCode Boolean
+     * @param requireNID Boolean
+     * @return true if succeeded
+     * @throws ResourceNotFound if is invalid
+     */
+    public Boolean updateOrg (
+            Long id,
+            String managerPhone,
+            String Description,
+            Boolean autoApprove,
+            Boolean requireCode,
+            Boolean requireNID
+    ) throws ResourceNotFound, AccessDeniedException {
+        Optional<Organization> org = organizationRepo.findById(id);
+        if (org.isPresent()){
+
+            if(Objects.equals(org.get().getManager().getPhone(), managerPhone)) {
+                organizationRepo.updateOrg(Description, autoApprove, requireCode, requireNID, org.get().getId());
+                return true;
+            }
+            else{
+                throw new AccessDeniedException("Only manager can update settings.");
+            }
+        }
+        else{
+            throw new ResourceNotFound("Organization not found of this id.");
         }
     }
 }

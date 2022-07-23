@@ -37,7 +37,7 @@ public class LucentBackendApplication {
 			donorUser.setPhone("01782267068");
 			donorUser.setName("Admin User");
 			donorUser.setPassword("admin");
-			appUserService.saveAdminUser(donorUser);
+			appUserService.saveUser(donorUser, appUserService.getRole("ROLE_ADMIN"), "application");
 		};
 	}
 }

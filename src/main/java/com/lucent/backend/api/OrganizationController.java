@@ -13,6 +13,8 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -20,11 +22,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.net.URI;
+import java.nio.file.AccessDeniedException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 class OrganizationRegistrationForm{
     private String phone, name, password, orgName, orgDescription;
+}
+
+@Data
+class OrganizationUpdateForm{
+    private String description;
+    Boolean autoApprove, requireNID, requireCode;
 }
 
 @RestController @RequiredArgsConstructor @Slf4j
@@ -58,7 +69,7 @@ public class OrganizationController {
         appUserRequest.setPhone(form.getPhone());
         appUserRequest.setName(form.getName());
         appUserRequest.setPassword(form.getPassword());
-        AppUserResponse savedUserResponse = appUserService.saveUser(appUserRequest, this.getSiteURL(request));
+        AppUserResponse savedUserResponse = appUserService.saveUser(appUserRequest, appUserService.getRole("ROLE_MANAGER"), this.getSiteURL(request));
         AppUser savedUser = appUserService.getUser(savedUserResponse.phone);
 
         OrganizationRequest organizationRequest = new OrganizationRequest();
@@ -101,9 +112,34 @@ public class OrganizationController {
         return ResponseEntity.ok().body(organizationService.getOrganizations(false, page, size, sortBy));
     }
 
+    /**
+     * Publishes an organization Given the id | Accessible by Admin only
+     * @param id Organization id
+     * @return Status
+     * @throws ResourceNotFound if id is invalid
+     */
     @PostMapping("/org/publish/{id}")
-    public ResponseEntity<Boolean> publishOrg(@PathVariable Long id) throws ResourceNotFound {
-        return ResponseEntity.ok().body(organizationService.publishOrganization(id));
+    public ResponseEntity<Map<String, Boolean>> publishOrg(@PathVariable Long id) throws ResourceNotFound {
+        Map<String, Boolean> status = new HashMap<>();
+        status.put("status", organizationService.publishOrganization(id));
+        return ResponseEntity.ok().body(status);
     }
+
+    /**
+     * Updates organization information | Accessible by Manager Only
+     * @param id Organization id
+     * @param form An OrganizationUpdateForm containing description, autoApprove, requireNID, requireCode
+     * @return status
+     * @throws ResourceNotFound if id is invalid
+     * @throws AccessDeniedException if requesting user is not the manager of the organization
+     */
+    @PutMapping("/org/update/{id}")
+    public ResponseEntity<Map<String, Boolean>> updateOrg(@PathVariable Long id, @RequestBody OrganizationUpdateForm form) throws ResourceNotFound, AccessDeniedException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Map<String, Boolean> status = new HashMap<>();
+        status.put("status", organizationService.updateOrg(id, (String) auth.getPrincipal(), form.getDescription(), form.getAutoApprove(), form.getRequireCode(), form.getRequireNID()));
+        return ResponseEntity.ok().body(status);
+    }
+
 
 }

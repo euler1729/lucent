@@ -61,7 +61,7 @@ public class AppUserController {
     @PostMapping("/user/registration")
     public ResponseEntity<AppUserResponse> registerDonor(@RequestBody @Valid AppUserRequest user, HttpServletRequest request) throws DuplicatePhoneException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/registration").toUriString());
-        AppUserResponse savedUser = appUserService.saveUser(user, this.getSiteURL(request));
+        AppUserResponse savedUser = appUserService.saveUser(user, appUserService.getRole("ROLE_MANAGER"), this.getSiteURL(request));
         return ResponseEntity.created(uri).body(savedUser);
     }
 
