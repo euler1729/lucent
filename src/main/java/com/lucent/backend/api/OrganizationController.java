@@ -70,14 +70,35 @@ public class OrganizationController {
     }
 
     /**
-     * Returns all organizations
-     * @param request HttpServletRequest object
-     * @param response HttpServletRequest object
-     * @return User's profile as AppUserResponse
+     * Returns all published organizations
+     * @param page Page no
+     * @param size Page size
+     * @param sortBy Sort By field
+     * @return Paged Published Organizations
      */
     @GetMapping("/org/published")
-    public ResponseEntity<List<OrganizationResponse>> getProfile(HttpServletRequest request, HttpServletResponse response){
-        return ResponseEntity.ok().body(organizationService.getOrganizations());
+    public ResponseEntity<List<OrganizationResponse>> getPublishedOrg(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ){
+        return ResponseEntity.ok().body(organizationService.getOrganizations(true,  page, size, sortBy));
+    }
+
+    /**
+     * Returns all organizations | Accessible by Admin only
+     * @param page Page no
+     * @param size Page size
+     * @param sortBy Sort By field
+     * @return Paged All Organizations
+     */
+    @GetMapping("/org/all")
+    public ResponseEntity<List<OrganizationResponse>> getAllOrg(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ){
+        return ResponseEntity.ok().body(organizationService.getOrganizations(false, page, size, sortBy));
     }
 
     @PostMapping("/org/publish/{id}")

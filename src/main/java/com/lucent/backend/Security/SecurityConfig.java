@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET,"/user/login/**", "/token/refresh/**", "/org/published/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/registration/**", "/user/verify/**", "/org/registration/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/org/publish/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.GET, "/org/all/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and().authenticationManager(authenticationManager)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

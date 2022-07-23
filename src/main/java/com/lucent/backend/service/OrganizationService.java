@@ -9,6 +9,10 @@ import com.lucent.backend.domain.Organization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,13 +44,27 @@ public class OrganizationService {
 
     /**
      * Returns all published organizations
-     * @return all organizations
+     * @param onlyPublished If true returns only published organizations, else returns all
+     * @param page page no
+     * @param size page size
+     * @param sortBy sort by field
+     * @return List of Organizations as List< OrganizationResponse >
      */
-    public List<OrganizationResponse> getOrganizations(){
+    public List<OrganizationResponse> getOrganizations(Boolean onlyPublished, int page, int size, String sortBy){
+
+        Pageable paging = PageRequest.of(page, size, Sort.by(sortBy));
         List<OrganizationResponse> organizationResponses = new ArrayList<>();
-        organizationRepo.findAllByPublishedIsTrue().forEach(organization -> {
-            organizationResponses.add(new OrganizationResponse(organization));
-        });
+
+        if(onlyPublished) {
+            organizationRepo.findAllByPublishedIsTrue(paging).forEach(organization -> {
+                organizationResponses.add(new OrganizationResponse(organization));
+            });
+        }
+        else{
+            organizationRepo.findAll(paging).forEach(organization -> {
+                organizationResponses.add(new OrganizationResponse(organization));
+            });
+        }
         return organizationResponses;
     }
 
