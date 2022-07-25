@@ -13,9 +13,14 @@ import com.lucent.backend.domain.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
@@ -56,6 +61,39 @@ public class DonationService {
         }
         else{
             throw new ResourceNotFound("Invalid organization");
+        }
+    }
+
+    /**
+     * Get donations of an organization
+     * @param organizationId organization id
+     * @param page page no
+     * @param size page size
+     * @param top if true returns highest amount of donations, else latest donations
+     * @return List of DonationResponse
+     * @throws ResourceNotFound if organization not found
+     */
+    public List<DonationResponse> getDonations(Long organizationId, Boolean top, Integer page, Integer size) throws ResourceNotFound {
+        String sortby;
+        if(top){
+            sortby = "amount";
+        }
+        else{
+            sortby = "id";
+        }
+        Pageable paging = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC,sortby));
+
+        Optional<Organization> organization = organizationRepo.findById(organizationId);
+        List<DonationResponse> donationResponses = new ArrayList<>();
+        if(organization.isPresent()){
+            List<Donation> donations = donationRepo.findAllByOrganization(organization.get(), paging);
+            donations.forEach(donation -> {
+                donationResponses.add(new DonationResponse(donation));
+            });
+            return donationResponses;
+        }
+        else {
+            throw new ResourceNotFound("Organization not found");
         }
     }
 }
