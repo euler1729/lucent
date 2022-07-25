@@ -36,13 +36,13 @@ public class LucentBackendApplication {
 			Role donorRole = appUserService.saveRole(new Role(null, "ROLE_DONOR"));
 
 			AppUserRequest adminUser = new AppUserRequest();
-			adminUser.setPhone("01782267068");
+			adminUser.setPhone("01924165786");
 			adminUser.setName("Admin User");
 			adminUser.setPassword("admin");
 			appUserService.saveUser(adminUser, appUserService.getRole("ROLE_ADMIN"), "application");
 
 			AppUserRequest donorUser = new AppUserRequest();
-			donorUser.setPhone("01739194976");
+			donorUser.setPhone("01782267068");
 			donorUser.setName("Donor User");
 			donorUser.setPassword("donor");
 			appUserService.saveUser(donorUser, appUserService.getRole("ROLE_DONOR"), "application");

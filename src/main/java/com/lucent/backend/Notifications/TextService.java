@@ -1,6 +1,7 @@
 package com.lucent.backend.Notifications;
 
 import com.lucent.backend.domain.AppUser;
+import com.lucent.backend.domain.DonationCollection;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,19 @@ public class TextService {
         sendText(user.getPhone(), message);
     }
 
+    public void sendDonationCollectionText(DonationCollection donationCollection, Double collected)  {
+//        String message = "Dear [[donor]], [[spending]] tk of your [[available]] tk donation is being spent by [[organization]]. Thank you.";
+//        message.replace("[[donor]]", donationCollection.getDonation().getDonor().getName());
+//        message.replace("[[spending]]", String.valueOf(donationCollection.getAmount()));
+//        message.replace("[[available]]", String.valueOf(donationCollection.getDonation().getAmount()));
+//        message.replace("[[organization]]", String.valueOf(donationCollection.getSpending().getOrganization()));
+//        message.replace(" ", "%20");
+
+        String message = "Dear " +  donationCollection.getDonation().getDonor().getName() + ", " + String.valueOf(collected + "tk of your " + String.valueOf(donationCollection.getDonation().getAmount()) + "tk donation is being spent by " + String.valueOf(donationCollection.getSpending().getOrganization().getName())) + " as " + donationCollection.getSpending().getDescription() + ". Thank you.";
+        message = message.replace(" ", "%20");
+        sendText(donationCollection.getDonation().getDonor().getPhone(), message);
+    }
+
     /**
      * Given To and MSG, sends the text
      * @param to Phone Number Comma Separated
@@ -45,6 +59,10 @@ public class TextService {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
+        }
+        else{
+            System.out.println("to = " + to);
+            System.out.println("msg = " + msg);
         }
     }
 }

@@ -10,14 +10,14 @@ import lombok.NoArgsConstructor;
 @Data @AllArgsConstructor @NoArgsConstructor
 public class DonationResponse {
     public Long id;
-    public AppUser donor;
-    public Organization organization;
+    public AppUserResponse donor;
+    public OrganizationResponse organization;
     public Double amount;
 
     public DonationResponse(Donation donation){
         this.id = donation.getId();
-        this.donor = donation.getDonor();
-        this.organization = donation.getOrganization();
+        this.donor = new AppUserResponse(donation.getDonor());
+        this.organization = new OrganizationResponse(donation.getOrganization());
         this.amount = donation.getAmount();
     }
 

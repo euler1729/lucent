@@ -9,11 +9,13 @@ import java.time.LocalDateTime;
  * AppUser format for outgoing response
  */
 public class AppUserResponse{
+    public Long id;
     public String name, phone;
     public Boolean verified;
     public LocalDateTime created, updated;
     public Role role;
     public AppUserResponse(AppUser user){
+        this.id = user.getId();
         this.name = user.getName();
         this.phone = user.getPhone();
         this.verified = user.isVerified();

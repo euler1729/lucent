@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET, "/org/all/**").hasAuthority("ROLE_ADMIN")
 
                 .antMatchers(HttpMethod.GET, "/membership/unapproved/**").hasAuthority("ROLE_MANAGER")
+                .antMatchers(HttpMethod.POST, "/spending/request/**").hasAuthority("ROLE_MANAGER")
                 .antMatchers(HttpMethod.PUT, "/org/update/**", "/membership/approve/**").hasAuthority("ROLE_MANAGER")
 
                 .antMatchers(HttpMethod.POST, "/membership/request", "/donate").hasAuthority("ROLE_DONOR")
