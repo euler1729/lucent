@@ -7,15 +7,19 @@ import com.lucent.backend.Repo.OrganizationRepo;
 import com.lucent.backend.Repo.SpendingRepo;
 import com.lucent.backend.api.Exception.ResourceNotFound;
 import com.lucent.backend.api.dto.SpendingRequest;
+import com.lucent.backend.api.dto.SpendingResponse;
 import com.lucent.backend.domain.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,6 +112,31 @@ public class SpendingService {
         }
         else{
             throw new ResourceNotFound("Organization not valid.");
+        }
+    }
+
+    /**
+     * Get latest spendings | Permit all
+     * @param organizationId organizationId
+     * @param page page no
+     * @param size page size
+     * @return List of SpendingResponse
+     * @throws ResourceNotFound if organizationId is invalid
+     */
+    public List<SpendingResponse> getSpendings(Long organizationId, Integer page, Integer size) throws ResourceNotFound {
+        Pageable paging = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+
+        Optional<Organization> organization = organizationRepo.findById(organizationId);
+        List<SpendingResponse> spendingResponses = new ArrayList<>();
+        if(organization.isPresent()){
+            List<Spending> spendings = spendingRepo.findAllByOrganization(organization.get(), paging);
+            spendings.forEach(spending -> {
+                spendingResponses.add(new SpendingResponse(spending));
+            });
+            return spendingResponses;
+        }
+        else {
+            throw new ResourceNotFound("Organization not found");
         }
     }
 }
