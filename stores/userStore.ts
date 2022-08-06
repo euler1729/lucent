@@ -4,10 +4,14 @@ export const userStore = defineStore('userStore',{
 
     state:()=>({
         form:{
-            name:null,
-            email:null,
-            password:null
+            name:"",
+            email:"",
+            phone:"",
+            password:""
         }
     }),
+    persist:{
+        enabled:true
+    }
     
 });

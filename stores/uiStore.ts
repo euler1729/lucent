@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 
 export const uiStore = defineStore('uiStore', {
     state: () => ({
-        dark: true,
+        dark: false,
         isLoggedIn:false,
         isLoginPageOpen:false,
         isRegisterPageOpen:false,
@@ -34,20 +34,20 @@ export const uiStore = defineStore('uiStore', {
         showLogin(){
             this.isRegisterPageOpen = false;
             this.isOrgRegPageOpen = false;
-            this.isLoginPageOpen = !this.isLoginPageOpen;
+            this.isLoginPageOpen = true;
         },
         showRegistrationPage(){
             this.isLoginPageOpen = false;
             this.isOrgRegPageOpen = false;
-            this.isRegisterPageOpen = !this.isRegisterPageOpen;
+            this.isRegisterPageOpen = true;
         },
         showOrgRegPage(){
             this.isLoginPageOpen = false;
             this.isRegisterPageOpen = false;
-            this.isOrgRegPageOpen = !this.isOrgRegPageOpen;
+            this.isOrgRegPageOpen = true;
         }
     },
-    // persist:{
-    //     enabled:true
-    // }
+    persist:{
+        enabled:true
+    }
 });

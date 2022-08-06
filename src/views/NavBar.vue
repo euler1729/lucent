@@ -32,7 +32,7 @@
                         </button>
 
                         <!-- Language -->
-                        <button type="button" class="ml-2">
+                        <button v-if="false" type="button" class="ml-2">
                             <svg class="w-8 h-6 fill-[#321443] dark:fill-white" viewBox="1 1 49 31" fill="none"
                                 style="border:1px solid yellow; height: inherit; border-radius: 5px;"
                                 xmlns="http://www.w3.org/2000/svg">
