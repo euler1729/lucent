@@ -1,23 +1,14 @@
-// ./tailwind.config.js
-
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
-  darkMode: 'class',
+  darkMode: "class",
+  content: ["./src/**/*.{html,js,vue}"],
   theme: {
-    extend: {
-      keyframes: {
-        wiggle: {
-          '0%, 100%': { transform: 'rotate(-3deg)' },
-          '50%': { transform: 'rotate(3deg)' },
-        }
-      }
-    },
-    screens:{
-      'sm':'480px',
-    },
-  },
-  variants: {
     extend: {},
+    fontFamily: {
+      display: ["Lobster"],
+      body: ['"Inter"', '"Open Sans"'],
+      bangla: ["SheikhHasina", '"Open Sans"'],
+    },
   },
   plugins: [],
-}
+};

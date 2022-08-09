@@ -1,29 +1,40 @@
-<script lang="ts">
-import { defineComponent } from "vue";
-import { RouterLink, RouterView } from "vue-router";
-import NavBar from './views/NavBar.vue';
-
-export default defineComponent({
-  setup() {
-    // document.documentElement.classList.add('dark')
-  },
-  components: {
-    NavBar
-  }
-});
-
-</script>
-
 <template>
-  <div id="app" class="p-2">
-    <div>
-      <NavBar />
-      <RouterView />
-    </div>
-  </div>
-
+  <RouterView />
 </template>
 
-<style>
+<script setup>
+import { RouterLink, RouterView } from "vue-router";
+import { onMounted, onBeforeMount } from "@vue/runtime-core";
+import { useInf } from "./stores/inf.js";
 
-</style>
+const inf = useInf();
+
+onMounted(() => {
+  setTheme();
+  setLanguage();
+});
+
+function setLanguage() {
+  if (localStorage.lang === "en" || !("lang" in localStorage)) {
+    inf.setLang("en");
+    localStorage.setItem("lang", "en");
+  } else {
+    inf.setLang("bn");
+    localStorage.setItem("lang", "bn");
+  }
+}
+
+function setTheme() {
+  if (
+    localStorage.theme === "dark" ||
+    (!("theme" in localStorage) &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches)
+  ) {
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  }
+}
+</script>
