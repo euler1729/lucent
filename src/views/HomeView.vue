@@ -25,7 +25,6 @@ onMounted(() => {
 function loadOrganizations() {
   api.get("/org/published?page=0&size=3&sortBy=name").then((response) => {
     orgs.value = response.data;
-    console.log(response.data);
   });
 }
 </script>
