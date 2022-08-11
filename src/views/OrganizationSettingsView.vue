@@ -1,4 +1,5 @@
 <template>
+  <Loading v-if="loading" msg="Getting Organization" />
   <DefaultLayout>
     <div class="flex flex-col items-center">
       <div class="grid md:w-3/4 grid-cols-1 mx-10 my-10">
@@ -108,12 +109,13 @@ import { useUserStore } from "../stores/user.js";
 import { useRouter } from "vue-router";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 import api from "../api";
+import Loading from "../components/Loading.vue";
 
 const user = useUserStore();
 const router = useRouter();
 
 const orgInfo = ref({});
-const autoApprove = ref(false);
+const loading = ref(false);
 
 const updateBtnLabel = ref("Update");
 
@@ -127,7 +129,7 @@ onMounted(() => {
 
 function getOrg(counter) {
   if (counter < 2) {
-    updateBtnLabel.value = "Loading";
+    loading.value = true;
     api
       .get("/org/find", {
         headers: {
@@ -136,7 +138,7 @@ function getOrg(counter) {
       })
       .then((response) => {
         orgInfo.value = response.data;
-        updateBtnLabel.value = "Update";
+        loading.value = false;
       })
       .catch((err) => {
         if (err.response.status == 403) {
@@ -156,7 +158,7 @@ function getOrg(counter) {
             })
             .catch((err) => {
               user.logout();
-              updateBtnLabel.value = "Update";
+              loading.value = false;
             });
         }
       });

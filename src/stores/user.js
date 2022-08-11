@@ -27,8 +27,8 @@ export const useUserStore = defineStore({
 
     setUser(userInf) {
       this.name = userInf.name;
-      this.phone = userInf.name;
-      this.verified = userInf.name;
+      this.phone = userInf.phone;
+      this.verified = userInf.verified;
       this.role = userInf.role.name;
     },
 
