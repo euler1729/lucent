@@ -48,6 +48,8 @@ public class MembershipController {
         return ResponseEntity.created(uri).body(membershipService.saveMembership(membershipRequest, appUserService.getUser((String) auth.getPrincipal())));
     }
 
+
+
     /**
      * Approves a membership request | Accessible by manager
      * @param id organization id
@@ -115,5 +117,24 @@ public class MembershipController {
             @RequestParam(defaultValue = "id") String sortBy
     ) throws ResourceNotFound {
         return ResponseEntity.ok().body(membershipService.getMembership(organizationId, false, true, page, size, sortBy));
+    }
+
+    /**
+     * Check if user is a member of organization
+     * @param orgId organization id
+     * @return MembershipResponse
+     * @throws ResourceNotFound if organizationId is invalid or No user is not a member
+     */
+    @Operation(summary = "Check if user is a member of organization")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Check if user is a member of organization",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = MembershipResponse.class)) }),
+            @ApiResponse(responseCode = "403", description = "Invalid token"),
+    })
+    @GetMapping("/org/check/{orgId}")
+    public ResponseEntity<MembershipResponse> checkMembership(@PathVariable Long orgId) throws ResourceNotFound {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.ok().body(membershipService.isMember( appUserService.getUser((String) auth.getPrincipal()) ,orgId));
     }
 }

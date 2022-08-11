@@ -12,15 +12,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MembershipResponse {
     public Long id;
-    public AppUserResponse donor;
-    public OrganizationResponse organization;
+    public String donor;
+    public String organization;
     public String nid, membershipCode;
     public boolean approved;
 
     public MembershipResponse(Membership membership){
         this.id = membership.getId();
-        this.donor = new AppUserResponse(membership.getDonor());
-        this.organization = new OrganizationResponse(membership.getOrganization());
+        this.donor = membership.getDonor().getName();
+        this.organization = membership.getOrganization().getName();
         this.nid = membership.getNid();
         this.membershipCode = membership.getMembershipCode();
         this.approved = membership.getApproved();

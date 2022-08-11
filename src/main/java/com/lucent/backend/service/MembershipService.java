@@ -128,4 +128,17 @@ public class MembershipService {
             throw new ResourceNotFound("Organization not found");
         }
     }
+
+    public MembershipResponse isMember(AppUser donor, Long orgId) throws ResourceNotFound {
+        Optional<Organization> organization = organizationRepo.findById(orgId);
+
+        if(organization.isPresent()){
+
+            Optional<Membership> membership = membershipRepo.findByDonorAndOrganization(donor, organization.get());
+            if(membership.isPresent()) return new MembershipResponse(membership.get());
+            else throw new ResourceNotFound("No membership found.");
+
+        }
+        else throw new ResourceNotFound("Invalid Organization Id");
+    }
 }
