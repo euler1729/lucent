@@ -78,6 +78,7 @@
         </div>
 
         <div
+          @click="navDonations"
           class="text-sm underline font-semibold text-gray-500 mt-4 cursor-pointer"
         >
           All Donations
@@ -90,12 +91,13 @@
 <script setup>
 import DefaultLayout from "../layout/Default.vue";
 import Loading from "../components/Loading.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import api from "../api";
 import Btn from "../components/Btn.vue";
 
 const route = useRoute();
+const router = useRouter();
 
 const loading = ref(false);
 const orgInfo = ref({});
@@ -155,6 +157,10 @@ function loadOrg() {
     .catch((err) => {
       loading.value = false;
     });
+}
+
+function navDonations() {
+  router.push(`/donations/${route.params.id}`);
 }
 
 function getTimeDiff(created) {
