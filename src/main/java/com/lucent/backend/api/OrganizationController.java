@@ -49,7 +49,7 @@ public class OrganizationController {
     private final AppUserService appUserService;
 
     /**
-     * Retrive site url domain
+     * Retrieve site url domain
      * @param request A HttpServletRequest object
      * @return A sting literal : siteurl
      */
@@ -107,6 +107,24 @@ public class OrganizationController {
     @GetMapping("/org/det/{id}")
     public ResponseEntity<OrganizationResponse> getOrg(@PathVariable Long id) throws DuplicatePhoneException, ResourceNotFound {
         return ResponseEntity.ok().body(organizationService.orgDetails(id));
+    }
+
+    /**
+     * Returns Organization of manager
+     * @return OrganizationResponse
+     * @throws ResourceNotFound if no  Organization if found under user
+     */
+    @Operation(summary = "Returns Organization of manager")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns Organization of manager",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = OrganizationResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "Invalid ID"),
+    })
+    @GetMapping("/org/find")
+    public ResponseEntity<OrganizationResponse> getOrganizationByManager() throws ResourceNotFound {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return  ResponseEntity.ok().body(organizationService.findOrganization((appUserService.getUser((String) auth.getPrincipal()))));
     }
 
 

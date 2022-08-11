@@ -1,5 +1,6 @@
 package com.lucent.backend.Repo;
 
+import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.domain.Organization;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -16,6 +17,7 @@ public interface OrganizationRepo extends PagingAndSortingRepository<Organizatio
 
     List<Organization> findAllByPublishedIsTrue(Pageable pageable);
     Optional<Organization> findById(Long id);
+    Optional<Organization> findByManager(AppUser manager);
 
     @Modifying @Transactional @Query("UPDATE Organization set published=TRUE where id=:id")
     void publishOrganizationByID(Long id);

@@ -2,6 +2,7 @@ package com.lucent.backend.service;
 
 import com.lucent.backend.Repo.OrganizationRepo;
 import com.lucent.backend.api.Exception.ResourceNotFound;
+import com.lucent.backend.api.dto.AppUserResponse;
 import com.lucent.backend.api.dto.OrganizationRequest;
 import com.lucent.backend.api.dto.OrganizationResponse;
 import com.lucent.backend.domain.AppUser;
@@ -44,11 +45,24 @@ public class OrganizationService {
         return new OrganizationResponse(organizationRepo.save(organization));
     }
 
+    /**
+     * Returns organization detail by id
+     * @param id Organization id
+     * @return OrganizationResponse
+     * @throws ResourceNotFound if id is invalid
+     */
     public OrganizationResponse orgDetails(Long id) throws ResourceNotFound {
         Optional<Organization> org = organizationRepo.findById(id);
 
         if(org.isPresent()) return new OrganizationResponse(org.get());
         else throw new ResourceNotFound("Invalid Id");
+    }
+
+    public OrganizationResponse findOrganization(AppUser manager) throws ResourceNotFound {
+        Optional<Organization> organization = organizationRepo.findByManager(manager);
+
+        if(organization.isPresent()) return new OrganizationResponse(organization.get());
+        else throw new ResourceNotFound("No organization found");
     }
 
     /**
