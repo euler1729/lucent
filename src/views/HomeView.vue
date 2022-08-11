@@ -2,7 +2,7 @@
   <DefaultLayout>
     <div class="px-10 py-10 grid gri grid-cols-4">
       <div v-for="org in orgs" :key="org.id">
-        <OrgThumb :organization="org" />
+        <OrgThumb @click="navOrg(org.id)" :organization="org" />
       </div>
     </div>
   </DefaultLayout>
@@ -15,12 +15,18 @@ import api from "../api";
 
 import { ref } from "vue";
 import { onMounted } from "@vue/runtime-core";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const orgs = ref([]);
 
 onMounted(() => {
   loadOrganizations();
 });
+
+function navOrg(id) {
+  router.push(`/org/${id}`);
+}
 
 function loadOrganizations() {
   api.get("/org/published?page=0&size=3&sortBy=name").then((response) => {

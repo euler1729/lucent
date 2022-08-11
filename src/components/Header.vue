@@ -1,7 +1,8 @@
 <template>
   <div class="flex flex-row items-center justify-between px-4 py-2">
     <div
-      class="font-display italic underline font-semibold text-xl md:text-2xl"
+      @click="gotoHome"
+      class="cursor-pointer font-display italic underline font-semibold text-xl md:text-2xl"
     >
       Lucent
     </div>
@@ -66,6 +67,9 @@ function afterLoginSuccess() {
   console.log("Successfuly Logged In");
 }
 
+function gotoHome() {
+  router.push({ name: "home" });
+}
 function toggleLanguage() {
   if (localStorage.lang === "en" || !("lang" in localStorage)) {
     inf.setLang("bn");

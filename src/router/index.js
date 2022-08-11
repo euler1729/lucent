@@ -14,6 +14,16 @@ const router = createRouter({
       name: "profile",
       component: () => import("../views/ProfileView.vue"),
     },
+    {
+      path: "/org/:id",
+      name: "organization",
+      component: () => import("../views/OrganizationDetailView.vue"),
+    },
+    {
+      path: "/donations/:orgId",
+      name: "donations",
+      component: () => import("../views/DonationsView.vue"),
+    },
   ],
 });
 

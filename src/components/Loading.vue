@@ -23,7 +23,16 @@
           fill="#1C64F2"
         />
       </svg>
-      Loading...
+      {{ $props.msg }}
     </button>
   </div>
 </template>
+
+<script setup>
+defineProps({
+  msg: {
+    type: String,
+    default: "Loading...",
+  },
+});
+</script>
