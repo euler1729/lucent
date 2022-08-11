@@ -22,7 +22,7 @@
       >
         <div class="font-semibold">Top Donations</div>
         <div
-          class="w-48 mb-4 mt-2 mx-20 border-purple-500 border-b-2 rounded-lg"
+          class="w-48 mb-4 mt-2 px-20 border-purple-500 border-b-2 rounded-lg"
         ></div>
 
         <div
@@ -51,6 +51,12 @@
           <div v-for="spending in spendings" :key="spending.id">
             {{ spending.amount }} /- | {{ spending.description }}
           </div>
+          <div
+            @click="navSpendings"
+            class="self-center text-sm underline font-semibold text-gray-500 mt-4 cursor-pointer text-center"
+          >
+            See details spendings
+          </div>
         </div>
       </div>
 
@@ -60,7 +66,7 @@
       >
         <div class="font-semibold">Latest Donations</div>
         <div
-          class="w-48 mb-4 mt-2 mx-20 border-cyan-500 border-b-2 rounded-lg"
+          class="w-48 mb-4 mt-2 px-20 border-cyan-500 border-b-2 rounded-lg"
         ></div>
 
         <div
@@ -161,6 +167,10 @@ function loadOrg() {
 
 function navDonations() {
   router.push(`/donations/${route.params.id}`);
+}
+
+function navSpendings() {
+  router.push(`/spendings/${route.params.id}`);
 }
 
 function getTimeDiff(created) {

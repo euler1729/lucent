@@ -20,9 +20,9 @@ const router = createRouter({
       component: () => import("../views/OrganizationDetailView.vue"),
     },
     {
-      path: "/donations/:orgId",
-      name: "donations",
-      component: () => import("../views/DonationsView.vue"),
+      path: "/spendings/:orgId",
+      name: "spendings",
+      component: () => import("../views/SpendingsView.vue"),
     },
   ],
 });
