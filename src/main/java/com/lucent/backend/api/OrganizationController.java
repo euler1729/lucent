@@ -93,6 +93,24 @@ public class OrganizationController {
     }
 
     /**
+     * Registers an organization with its manager given the id
+     * @return Saved User Response
+     * @throws DuplicatePhoneException if user already exists with given email
+     */
+    @Operation(summary = "Returns Organization")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Returns Organization",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = OrganizationResponse.class)) }),
+            @ApiResponse(responseCode = "400", description = "Invalid ID"),
+    })
+    @GetMapping("/org/det/{id}")
+    public ResponseEntity<OrganizationResponse> getOrg(@PathVariable Long id) throws DuplicatePhoneException, ResourceNotFound {
+        return ResponseEntity.ok().body(organizationService.orgDetails(id));
+    }
+
+
+    /**
      * Returns all published organizations
      * @param page Page no
      * @param size Page size

@@ -44,6 +44,13 @@ public class OrganizationService {
         return new OrganizationResponse(organizationRepo.save(organization));
     }
 
+    public OrganizationResponse orgDetails(Long id) throws ResourceNotFound {
+        Optional<Organization> org = organizationRepo.findById(id);
+
+        if(org.isPresent()) return new OrganizationResponse(org.get());
+        else throw new ResourceNotFound("Invalid Id");
+    }
+
     /**
      * Returns all published organizations
      * @param onlyPublished If true returns only published organizations, else returns all
