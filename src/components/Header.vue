@@ -27,6 +27,14 @@
           </span></Btn
         >
       </div>
+
+      <div class="mx-2" v-if="user.role === user.managerRole">
+        <Btn @click="navSettings"
+          ><font-awesome-icon icon="gear" />
+
+          <span class="hidden md:inline ml-2">Organization Settings</span>
+        </Btn>
+      </div>
     </div>
   </div>
   <Login
@@ -61,6 +69,10 @@ function login() {
   } else {
     router.push({ name: "profile" });
   }
+}
+
+function navSettings() {
+  router.push({ name: "orgsettings" });
 }
 
 function afterLoginSuccess() {

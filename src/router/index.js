@@ -14,10 +14,21 @@ const router = createRouter({
       name: "profile",
       component: () => import("../views/ProfileView.vue"),
     },
+
+    {
+      path: "/orgsettings",
+      name: "orgsettings",
+      component: () => import("../views/OrganizationSettingsView.vue"),
+    },
     {
       path: "/org/:id",
       name: "organization",
       component: () => import("../views/OrganizationDetailView.vue"),
+    },
+    {
+      path: "/donations/:orgId",
+      name: "donations",
+      component: () => import("../views/DonationsView.vue"),
     },
     {
       path: "/spendings/:orgId",

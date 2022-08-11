@@ -9,7 +9,11 @@ export const useUserStore = defineStore({
     access_token: "",
     refresh_token: "",
     verified: true,
-    Role: "",
+    role: "",
+
+    managerRole: "ROLE_MANAGER",
+    donorRule: "ROLE_DONOR",
+    adminRole: "ROLE_ADMIN",
   }),
   getters: {},
   actions: {
