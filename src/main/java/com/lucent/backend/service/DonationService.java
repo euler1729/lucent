@@ -74,13 +74,11 @@ public class DonationService {
      * @throws ResourceNotFound if organization not found
      */
     public List<DonationResponse> getDonations(Long organizationId, Boolean top, Integer page, Integer size) throws ResourceNotFound {
-        String sortby;
+        String sortby = "id";
         if(top){
             sortby = "amount";
         }
-        else{
-            sortby = "id";
-        }
+ 
         Pageable paging = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC,sortby));
 
         Optional<Organization> organization = organizationRepo.findById(organizationId);
