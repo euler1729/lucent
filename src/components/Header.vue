@@ -35,6 +35,13 @@
           <span class="hidden md:inline ml-2">Organization Settings</span>
         </Btn>
       </div>
+      <div class="mx-2" v-if="user.role === user.adminRole">
+        <Btn @click="navAdminDashboard"
+          ><font-awesome-icon icon="gear" />
+
+          <span class="hidden md:inline ml-2">Dashboard </span>
+        </Btn>
+      </div>
     </div>
   </div>
   <Login
@@ -104,5 +111,9 @@ function toggleTheme() {
     document.documentElement.classList.add("dark");
     localStorage.theme = "dark";
   }
+}
+
+function navAdminDashboard() {
+  router.push({ name: "adminDashboard" });
 }
 </script>

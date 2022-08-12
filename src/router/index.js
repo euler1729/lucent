@@ -40,6 +40,11 @@ const router = createRouter({
       name: "membership-request",
       component: () => import("../views/MembeshipRequests.vue"),
     },
+    {
+      path: "/admin",
+      name: "adminDashboard",
+      component: () => import("../views/AdminDashboard.vue"),
+    },
   ],
 });
 

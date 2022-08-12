@@ -36,6 +36,12 @@ export const useUserStore = defineStore({
 
     logout() {
       this.loggedIn = false;
+      this.name = "";
+      this.phone = "";
+      this.access_token = "";
+      this.refresh_token = "";
+      this.verified = true;
+      this.role = "";
       localStorage.removeItem("refresh_token");
     },
   },
