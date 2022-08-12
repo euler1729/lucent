@@ -45,6 +45,7 @@ import Btn from "./Btn.vue";
 import { ref } from "vue";
 import { useUserStore } from "../stores/user";
 import api from "../api";
+const emit = defineEmits(["onsuccess"]);
 const props = defineProps({
   isOpen: {
     type: Boolean,
@@ -86,6 +87,7 @@ function verifyAccount() {
         .catch((err) => {
           user.logout();
         });
+      emit("onsuccess");
     })
     .catch((err) => {
       console.log(err);

@@ -128,6 +128,11 @@
     :key="spendingModalKey"
     @onsuccess="donationSuccess"
   />
+  <VerifyPhone
+    :isOpen="verifyPhoneModal"
+    @onsuccess="donate"
+    :key="verifyPhoneModalKey"
+  />
 </template>
 
 <script setup>
@@ -142,6 +147,7 @@ import Membership from "../components/Membership.vue";
 import MembershipPending from "../components/MembershipPending.vue";
 import Donation from "../components/Donation.vue";
 import Spending from "../components/Spending.vue";
+import VerifyPhone from "../components/VerifyPhone.vue";
 import { useUserStore } from "../stores/user";
 
 const user = useUserStore();
@@ -165,6 +171,8 @@ const donationModal = ref(false);
 const donationModalKey = ref(0);
 const spendingModal = ref(false);
 const spendingModalKey = ref(0);
+const verifyPhoneModal = ref(false);
+const verifyPhoneModalKey = ref(0);
 
 const membership = ref({
   checked: false,
@@ -322,27 +330,32 @@ function donate() {
     loginModal.value = true;
     loginModalKey.value = Math.random();
   } else {
-    if (membership.value.checked) {
-      if (membership.value.member) {
-        if (membership.value.approved) {
-          // Membership approved - Process to donate
-          console.log("Approved");
-          donationModal.value = true;
-          donationModalKey.value = Math.random();
+    if (user.verified) {
+      if (membership.value.checked) {
+        if (membership.value.member) {
+          if (membership.value.approved) {
+            // Membership approved - Process to donate
+            console.log("Approved");
+            donationModal.value = true;
+            donationModalKey.value = Math.random();
+          } else {
+            memebrshipRejectedModal.value = true;
+            memebrshipRejectedModalKey.value = Math.random();
+          }
         } else {
-          memebrshipRejectedModal.value = true;
-          memebrshipRejectedModalKey.value = Math.random();
+          // Not a member - Open the membership modal
+          console.log("Not a member");
+          memebrshipModal.value = true;
+          memebrshipModalKey.value = Math.random();
         }
       } else {
-        // Not a member - Open the membership modal
-        console.log("Not a member");
-        memebrshipModal.value = true;
-        memebrshipModalKey.value = Math.random();
+        // Memberhip hasnt been checked
+        console.log("Membership is to be decided");
+        checkMembership(0);
       }
     } else {
-      // Memberhip hasnt been checked
-      console.log("Membership is to be decided");
-      checkMembership(0);
+      verifyPhoneModal.value = true;
+      verifyPhoneModalKey.value = Math.random();
     }
   }
 }
