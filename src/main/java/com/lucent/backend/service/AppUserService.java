@@ -135,4 +135,15 @@ public class AppUserService implements UserDetailsService {
     public Role getRole(String roleName){
         return roleRepo.findRoleByName(roleName);
     }
+
+    /**
+     * Resends verification code
+     * @param user AppUser
+     * @param siteurl baseurl
+     */
+    public Boolean resendVerification(AppUser user, String siteurl){
+        textService.sendVerificationText(user);
+        return true;
+    }
+
 }

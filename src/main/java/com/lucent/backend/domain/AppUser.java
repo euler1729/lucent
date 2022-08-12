@@ -38,7 +38,7 @@ public class AppUser {
     private Role role = new Role();
 
     private int verificationCode;
-    private boolean verified = true;
+    private boolean verified = false;
 
     @CreationTimestamp
     private LocalDateTime created;
