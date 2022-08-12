@@ -1,4 +1,5 @@
 <template>
+  <EmailVerificationAlert v-if="user.loggedIn && user.verified == false" />
   <div class="flex flex-row items-center justify-between px-4 py-2">
     <div
       @click="gotoHome"
@@ -56,6 +57,7 @@ import { ref } from "vue";
 import Btn from "./Btn.vue";
 import { useInf } from "../stores/inf.js";
 import Login from "./Login.vue";
+import EmailVerificationAlert from "./EmailVerificationAlert.vue";
 import { useUserStore } from "../stores/user.js";
 import { useRouter } from "vue-router";
 const user = useUserStore();
