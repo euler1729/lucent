@@ -34,6 +34,7 @@ export const useUserStore = defineStore({
 
     logout() {
       this.loggedIn = false;
+      localStorage.removeItem("refresh_token");
     },
   },
 });

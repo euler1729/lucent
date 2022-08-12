@@ -11,7 +11,7 @@
         <div class="py-4 text-xl font-semibold">
           Balance: {{ orgInfo.balance }} /-
         </div>
-        <Btn class="self-center">
+        <Btn @click="donate" class="self-center">
           <font-awesome-icon class="mr-2" icon="paper-plane" /> Donate
         </Btn>
       </div>
@@ -92,6 +92,17 @@
       </div>
     </div>
   </DefaultLayout>
+  <Login :isOpen="loginModal" @onsuccess="donate" :key="loginModalKey" />
+  <Membership
+    :isOpen="memebrshipModal"
+    :orgInfo="orgInfo"
+    @onsuccess="onMemberShipRequest"
+    :key="memebrshipModalKey"
+  />
+  <MembershipPending
+    :isOpen="memebrshipRejectedModal"
+    :key="memebrshipRejectedModalKey"
+  />
 </template>
 
 <script setup>
@@ -101,7 +112,12 @@ import { useRoute, useRouter } from "vue-router";
 import { ref, onMounted } from "vue";
 import api from "../api";
 import Btn from "../components/Btn.vue";
+import Login from "../components/Login.vue";
+import Membership from "../components/Membership.vue";
+import MembershipPending from "../components/MembershipPending.vue";
+import { useUserStore } from "../stores/user";
 
+const user = useUserStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -111,8 +127,24 @@ const spendings = ref([]);
 const latestDonation = ref([]);
 const topDonation = ref([]);
 
+const loginModal = ref(false);
+const loginModalKey = ref(0);
+const memebrshipModal = ref(false);
+const memebrshipModalKey = ref(0);
+const memebrshipRejectedModal = ref(false);
+const memebrshipRejectedModalKey = ref(0);
+
+const membership = ref({
+  checked: false,
+  member: false,
+  nid: null,
+  membershipCode: null,
+  approved: false,
+});
+
 onMounted(() => {
   loadOrg();
+  // if (user.loggedIn) checkMembership();
 });
 
 function loadSpendings() {
@@ -195,6 +227,89 @@ function getTimeDiff(created) {
   } else {
     if ((ss = 1)) return ss + " seconds ago";
     else return ss + " second ago";
+  }
+}
+
+function checkMembership(counter) {
+  if (counter < 2) {
+    membership.value.checked = false;
+    loading.value = true;
+    api
+      .get(`/membership/check/${route.params.id}`, {
+        headers: {
+          AUTHORIZATION: `Bearer ${user.access_token}`,
+        },
+      })
+      .then((response) => {
+        membership.value.checked = true;
+        membership.value.member = true;
+        membership.value.approved = response.data.approved;
+        membership.value.nid = response.data.nid;
+        membership.value.membershipCode = response.data.membershipCode;
+        loading.value = false;
+        donate();
+      })
+      .catch((err) => {
+        if (err.response.status == 403) {
+          // refresh token
+          api
+            .get("/token/refresh", {
+              headers: {
+                AUTHORIZATION: `Bearer ${user.refresh_token}`,
+              },
+            })
+            .then((refreshResponse) => {
+              user.setToken(
+                refreshResponse.data.access_token,
+                refreshResponse.data.refresh_token
+              );
+              checkMembership(counter + 1);
+            })
+            .catch((err) => {
+              user.logout();
+              loading.value = false;
+            });
+        } else {
+          console.log(err);
+          membership.value.approved = false;
+          membership.value.member = false;
+          membership.value.checked = true;
+          loading.value = false;
+          donate();
+        }
+      });
+  }
+}
+
+function onMemberShipRequest() {
+  checkMembership(0);
+}
+
+function donate() {
+  if (!user.loggedIn) {
+    loginModal.value = true;
+    loginModalKey.value = Math.random();
+  } else {
+    if (membership.value.checked) {
+      if (membership.value.member) {
+        if (membership.value.approved) {
+          // Membership approved - Process to donate
+          console.log("Approved");
+        } else {
+          memebrshipRejectedModal.value = true;
+          memebrshipRejectedModalKey.value = Math.random();
+        }
+      } else {
+        // Not a member - Open the membership modal
+        console.log("Not a member");
+        memebrshipModal.value = true;
+        memebrshipModalKey.value = Math.random();
+      }
+    } else {
+      // Memberhip hasnt been checked
+      console.log("Membership is to be decided");
+      checkMembership(0);
+    }
   }
 }
 </script>

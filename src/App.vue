@@ -25,9 +25,10 @@ onMounted(() => {
   setLanguage();
 });
 
-const loggingIn = ref(true);
+const loggingIn = ref(false);
 
 function refreshToken() {
+  loggingIn.value = true;
   api
     .get("/token/refresh", {
       headers: {
