@@ -22,6 +22,9 @@ public interface OrganizationRepo extends PagingAndSortingRepository<Organizatio
     @Modifying @Transactional @Query("UPDATE Organization set published=TRUE where id=:id")
     void publishOrganizationByID(Long id);
 
+    @Modifying @Transactional @Query("UPDATE Organization set published=FALSE where id=:id")
+    void unpublishOrganizationByID(Long id);
+
     @Modifying @Transactional
     @Query("UPDATE Organization set description=:description ,autoApprove=:autoApprove, requireCode=:requireCode, requireNID=:requireNID where id=:id")
     void updateOrg(String description, Boolean autoApprove, Boolean requireCode, Boolean requireNID, Long id);

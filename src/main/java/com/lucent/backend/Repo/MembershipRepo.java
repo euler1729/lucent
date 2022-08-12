@@ -3,6 +3,7 @@ package com.lucent.backend.Repo;
 import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.domain.Membership;
 import com.lucent.backend.domain.Organization;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -15,9 +16,9 @@ import java.util.Optional;
 @Repository
 public interface MembershipRepo extends PagingAndSortingRepository<Membership, Long> {
 
-    List<Membership> findAllByOrganization(Organization Organization);
-    List<Membership> findAllByOrganizationAndApprovedIsTrue(Organization Organization);
-    List<Membership> findAllByOrganizationAndApprovedIsFalse(Organization Organization);
+    List<Membership> findAllByOrganization(Organization Organization, Pageable pageable);
+    List<Membership> findAllByOrganizationAndApprovedIsTrue(Organization Organization, Pageable pageable);
+    List<Membership> findAllByOrganizationAndApprovedIsFalse(Organization Organization, Pageable pageable);
 
     Optional<Membership> findByDonorAndOrganization(AppUser donor, Organization organization);
 

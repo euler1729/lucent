@@ -108,17 +108,17 @@ public class MembershipService {
         if(organization.isPresent()){
 
             if(approved && notApproved){
-                membershipRepo.findAllByOrganization(organization.get()).forEach(membership -> {
+                membershipRepo.findAllByOrganization(organization.get(),paging).forEach(membership -> {
                     membershipResponses.add(new MembershipResponse(membership));
                 });
             }
             else if(approved){
-                membershipRepo.findAllByOrganizationAndApprovedIsTrue(organization.get()).forEach(membership -> {
+                membershipRepo.findAllByOrganizationAndApprovedIsTrue(organization.get(),paging).forEach(membership -> {
                     membershipResponses.add(new MembershipResponse(membership));
                 });
             }
             else if(notApproved){
-                membershipRepo.findAllByOrganizationAndApprovedIsFalse(organization.get()).forEach(membership -> {
+                membershipRepo.findAllByOrganizationAndApprovedIsFalse(organization.get(),paging).forEach(membership -> {
                     membershipResponses.add(new MembershipResponse(membership));
                 });
             }

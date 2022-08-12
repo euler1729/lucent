@@ -146,6 +146,7 @@ public class OrganizationController {
         return ResponseEntity.ok().body(organizationService.getOrganizations(true,  page, size, sortBy));
     }
 
+
     /**
      * Returns all organizations | Accessible by Admin only
      * @param page Page no
@@ -178,6 +179,23 @@ public class OrganizationController {
         status.put("status", organizationService.publishOrganization(id));
         return ResponseEntity.ok().body(status);
     }
+
+
+    /**
+     * Bans / Unpublishes an organization Given the id | Accessible by Admin only
+     * @param id Organization id
+     * @return Status
+     * @throws ResourceNotFound if id is invalid
+     */
+    @Operation(summary = "Publishes Organizations")
+    @ApiResponse(responseCode = "200", description = "Publishes Organizations | Open for admin only")
+    @PostMapping("/org/unpublish/{id}")
+    public ResponseEntity<Map<String, Boolean>> unpublishOrg(@PathVariable Long id) throws ResourceNotFound {
+        Map<String, Boolean> status = new HashMap<>();
+        status.put("status", organizationService.unpublishOrganization(id));
+        return ResponseEntity.ok().body(status);
+    }
+
 
     /**
      * Updates organization information | Accessible by Manager Only

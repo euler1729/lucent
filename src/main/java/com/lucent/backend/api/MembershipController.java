@@ -132,7 +132,7 @@ public class MembershipController {
                             schema = @Schema(implementation = MembershipResponse.class)) }),
             @ApiResponse(responseCode = "403", description = "Invalid token"),
     })
-    @GetMapping("/org/check/{orgId}")
+    @GetMapping("/membership/check/{orgId}")
     public ResponseEntity<MembershipResponse> checkMembership(@PathVariable Long orgId) throws ResourceNotFound {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity.ok().body(membershipService.isMember( appUserService.getUser((String) auth.getPrincipal()) ,orgId));

@@ -110,6 +110,24 @@ public class OrganizationService {
     }
 
     /**
+     * Unpublishes an organization given id
+     * @param id Organization id
+     * @return True is succeeded
+     * @throws ResourceNotFound if id is invalid
+     */
+    public Boolean unpublishOrganization(Long id) throws ResourceNotFound {
+
+        Optional<Organization> org = organizationRepo.findById(id);
+        if (org.isPresent()){
+            organizationRepo.unpublishOrganizationByID(org.get().getId());
+            return true;
+        }
+        else{
+            throw new ResourceNotFound("Organization not found of this id.");
+        }
+    }
+
+    /**
      * Updates Organization information and returns updated organization as OrganizationResponse
      * @param id Organization id
     *  @param managerPhone manager phone

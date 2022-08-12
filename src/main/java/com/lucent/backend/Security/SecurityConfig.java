@@ -41,14 +41,14 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.GET,"/user/login/**", "/token/refresh/**", "/org/det/**" ,"/org/published/**", "/membership/approved/**", "/donation/**", "/spending/latest/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/registration/**", "/user/verify/**", "/org/registration/**").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/org/publish/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers(HttpMethod.POST, "/org/publish/**","/org/unpublish/**").hasAuthority("ROLE_ADMIN")
                 .antMatchers(HttpMethod.GET, "/org/all/**").hasAuthority("ROLE_ADMIN")
 
                 .antMatchers(HttpMethod.GET, "/membership/unapproved/**", "/org/find/**").hasAuthority("ROLE_MANAGER")
                 .antMatchers(HttpMethod.POST, "/spending/request/**").hasAuthority("ROLE_MANAGER")
                 .antMatchers(HttpMethod.PUT, "/org/update/**", "/membership/approve/**").hasAuthority("ROLE_MANAGER")
 
-                .antMatchers(HttpMethod.POST, "/membership/request", "/donate", "/org/check/**").hasAuthority("ROLE_DONOR")
+                .antMatchers(HttpMethod.POST, "/membership/request", "/donate", "/membership/check/**").hasAuthority("ROLE_DONOR")
                 .anyRequest().authenticated()
                 .and().authenticationManager(authenticationManager)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
