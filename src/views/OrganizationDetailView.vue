@@ -122,6 +122,12 @@
     :key="donationModalKey"
     @onsuccess="handleDonationSuccess"
   />
+  <Spending
+    :isOpen="spendingModal"
+    :orgInfo="orgInfo"
+    :key="spendingModalKey"
+    @onsuccess="donationSuccess"
+  />
 </template>
 
 <script setup>
@@ -135,6 +141,7 @@ import Login from "../components/Login.vue";
 import Membership from "../components/Membership.vue";
 import MembershipPending from "../components/MembershipPending.vue";
 import Donation from "../components/Donation.vue";
+import Spending from "../components/Spending.vue";
 import { useUserStore } from "../stores/user";
 
 const user = useUserStore();
@@ -156,6 +163,8 @@ const memebrshipRejectedModal = ref(false);
 const memebrshipRejectedModalKey = ref(0);
 const donationModal = ref(false);
 const donationModalKey = ref(0);
+const spendingModal = ref(false);
+const spendingModalKey = ref(0);
 
 const membership = ref({
   checked: false,
@@ -341,6 +350,17 @@ function donate() {
 function handleDonationSuccess() {
   memebrshipRejectedModal.value = false;
   memebrshipRejectedModalKey.value = Math.random();
+  loadOrg(0);
+}
+
+function spend() {
+  spendingModal.value = true;
+  spendingModalKey.value = Math.random();
+}
+
+function donationSuccess() {
+  spendingModal.value = false;
+  spendingModalKey.value = Math.random();
   loadOrg(0);
 }
 

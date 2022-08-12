@@ -1,9 +1,9 @@
 <template>
-  <Modal :isOpen="isOpen" :key="modalKey" title="Donation">
+  <Modal :isOpen="isOpen" :key="modalKey" title="Soending">
     <div class="relative bg-white rounded-lg dark:bg-gray-700 font-bangla">
       <div class="pb-6 px-4">
         <form
-          v-if="donationSuccesful == false"
+          v-if="spendingSuccesful == false"
           class="space-y-6"
           @submit.prevent="processSubmission(0)"
         >
@@ -26,38 +26,22 @@
 
           <div>
             <label
-              for="trxid"
+              for="description"
               class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >TrxId</label
+              >Description</label
             >
-            <input
-              type="text"
-              name="trxid"
-              id="trxid"
-              v-model="trxid"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-              placeholder="TrxId"
+            <textarea
               required
-            />
-          </div>
-          <div>
-            <label
-              for="gateway"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-              >Payment Gateway</label
-            >
-            <input
-              disabled
               type="text"
-              name="gateway"
-              id="gateway"
-              v-model="gateway"
+              name="description"
+              id="description"
+              v-model="description"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-              placeholder="Payment Gateway"
+              placeholder="Spending description"
             />
           </div>
           <button
-            :disabled="donationOnProcess"
+            :disabled="spendingOnProcess"
             type="submit"
             class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
@@ -65,8 +49,8 @@
           </button>
         </form>
 
-        <div v-if="donationSuccesful" class="text-center text-gray-300">
-          <div>Donation Succesful</div>
+        <div v-if="spendingSuccesful" class="text-center text-gray-300">
+          <div>Spending Succesful</div>
           <Btn class="mt-4" @click="closeModal">Ok</Btn>
         </div>
       </div>
@@ -100,25 +84,25 @@ const isOpen = ref(props.isOpen);
 const modalKey = ref(0);
 const orgInfo = props.orgInfo;
 const amount = ref();
-const gateway = ref("mock");
+const description = ref("");
 const trxid = ref("12345678");
 
 const donationLabel = ref("Donate");
-const donationSuccesful = ref(false);
-const donationOnProcess = ref(false);
+const spendingSuccesful = ref(false);
+const spendingOnProcess = ref(false);
 
 function processSubmission(counter) {
   //   console.log(orgInfo.id);
   if (counter < 2) {
-    donationLabel.value = "Donating";
-    donationOnProcess.value = true;
+    donationLabel.value = "Processing";
+    spendingOnProcess.value = true;
     api
       .post(
-        "/donate",
+        "/spending/request",
         {
-          organizationID: orgInfo.id,
+          oganizationId: orgInfo.id,
           amount: amount.value,
-          gateway: gateway.value,
+          description: description.value,
         },
         {
           headers: {
@@ -127,8 +111,8 @@ function processSubmission(counter) {
         }
       )
       .then((response) => {
-        donationSuccesful.value = true;
-        donationOnProcess.value = false;
+        spendingSuccesful.value = true;
+        spendingOnProcess.value = false;
       })
       .catch((err) => {
         if (err.response.status == 403) {
