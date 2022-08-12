@@ -4,6 +4,7 @@ export const useUserStore = defineStore({
   id: "user",
   state: () => ({
     loggedIn: false,
+    id: 0,
     name: "",
     phone: "",
     access_token: "",
@@ -12,7 +13,7 @@ export const useUserStore = defineStore({
     role: "",
 
     managerRole: "ROLE_MANAGER",
-    donorRule: "ROLE_DONOR",
+    donorRole: "ROLE_DONOR",
     adminRole: "ROLE_ADMIN",
   }),
   getters: {},
@@ -26,6 +27,7 @@ export const useUserStore = defineStore({
     },
 
     setUser(userInf) {
+      this.id = userInf.id;
       this.name = userInf.name;
       this.phone = userInf.phone;
       this.verified = userInf.verified;

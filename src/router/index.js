@@ -35,6 +35,11 @@ const router = createRouter({
       name: "spendings",
       component: () => import("../views/SpendingsView.vue"),
     },
+    {
+      path: "/membership-requests/:orgId",
+      name: "membership-request",
+      component: () => import("../views/MembeshipRequests.vue"),
+    },
   ],
 });
 

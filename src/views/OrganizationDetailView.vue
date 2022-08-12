@@ -11,7 +11,20 @@
         <div class="py-4 text-xl font-semibold">
           Balance: {{ orgInfo.balance }} /-
         </div>
-        <Btn @click="donate" class="self-center">
+
+        <div
+          v-if="user.role == user.managerRole && orgManagerId == user.id"
+          class="flex flex-row items-center justify-center self-center"
+        >
+          <Btn @click="navMembershipRequest" class="mr-2">
+            <font-awesome-icon class="mr-2" icon="user-group" /> Membership
+            Requests
+          </Btn>
+          <Btn @click="spend">
+            <font-awesome-icon class="mr-2" icon="hand-holding-heart" /> Spend
+          </Btn>
+        </div>
+        <Btn v-else @click="donate" class="self-center">
           <font-awesome-icon class="mr-2" icon="paper-plane" /> Donate
         </Btn>
       </div>
@@ -123,6 +136,7 @@ const router = useRouter();
 
 const loading = ref(false);
 const orgInfo = ref({});
+const orgManagerId = ref(null);
 const spendings = ref([]);
 const latestDonation = ref([]);
 const topDonation = ref([]);
@@ -144,7 +158,6 @@ const membership = ref({
 
 onMounted(() => {
   loadOrg();
-  // if (user.loggedIn) checkMembership();
 });
 
 function loadSpendings() {
@@ -187,6 +200,7 @@ function loadOrg() {
     .then((response) => {
       loading.value = false;
       orgInfo.value = response.data;
+      orgManagerId.value = response.data.manager.id;
 
       loadLatestDonations();
       loadSpendings();
@@ -311,5 +325,9 @@ function donate() {
       checkMembership(0);
     }
   }
+}
+
+function navMembershipRequest() {
+  router.push(`/membership-requests/${route.params.id}`);
 }
 </script>
