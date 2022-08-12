@@ -116,6 +116,12 @@
     :isOpen="memebrshipRejectedModal"
     :key="memebrshipRejectedModalKey"
   />
+  <Donation
+    :isOpen="donationModal"
+    :orgInfo="orgInfo"
+    :key="donationModalKey"
+    @onsuccess="handleDonationSuccess"
+  />
 </template>
 
 <script setup>
@@ -128,6 +134,7 @@ import Btn from "../components/Btn.vue";
 import Login from "../components/Login.vue";
 import Membership from "../components/Membership.vue";
 import MembershipPending from "../components/MembershipPending.vue";
+import Donation from "../components/Donation.vue";
 import { useUserStore } from "../stores/user";
 
 const user = useUserStore();
@@ -147,6 +154,8 @@ const memebrshipModal = ref(false);
 const memebrshipModalKey = ref(0);
 const memebrshipRejectedModal = ref(false);
 const memebrshipRejectedModalKey = ref(0);
+const donationModal = ref(false);
+const donationModalKey = ref(0);
 
 const membership = ref({
   checked: false,
@@ -309,6 +318,8 @@ function donate() {
         if (membership.value.approved) {
           // Membership approved - Process to donate
           console.log("Approved");
+          donationModal.value = true;
+          donationModalKey.value = Math.random();
         } else {
           memebrshipRejectedModal.value = true;
           memebrshipRejectedModalKey.value = Math.random();
@@ -325,6 +336,12 @@ function donate() {
       checkMembership(0);
     }
   }
+}
+
+function handleDonationSuccess() {
+  memebrshipRejectedModal.value = false;
+  memebrshipRejectedModalKey.value = Math.random();
+  loadOrg(0);
 }
 
 function navMembershipRequest() {
