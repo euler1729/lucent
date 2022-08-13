@@ -1,7 +1,9 @@
 <template>
   <DefaultLayout>
-    <div class="px-10 py-10 grid gri grid-cols-4">
-      <div v-for="org in orgs" :key="org.id">
+    <div
+      class="mx-10 py-10 flex flex-row flex-wrap items-center justify-center"
+    >
+      <div v-for="org in orgs" :key="org.id" class="mx-4 my-2">
         <OrgThumb @click="navOrg(org.id)" :organization="org" />
       </div>
     </div>
