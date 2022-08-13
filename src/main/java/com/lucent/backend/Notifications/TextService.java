@@ -6,6 +6,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -46,6 +47,7 @@ public class TextService {
      * @param to Phone Number Comma Separated
      * @param msg String Message to send
      */
+    @Async
     public void sendText(String to, String msg){
         if(sendMsg) {
             String url = "http://66.45.237.70/api.php?" + "username=" + apiUsername + "&password=" + apiPassword + "&number=" + to + "&message=" + msg;
