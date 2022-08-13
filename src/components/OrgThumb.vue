@@ -13,16 +13,26 @@
         {{ getShortDesc(organization.description) }}
       </div>
     </div>
-    <div class="mb-2">
-      <Btn>Donate Now</Btn>
+    <div class="mb-2 font-bangla">
+      <Btn>{{ detailsBtnLabel[inf.lang] }}</Btn>
     </div>
   </div>
 </template>
 
 <script setup>
 import Btn from "../components/Btn.vue";
+import { ref } from "vue";
+import { useInf } from "../stores/inf.js";
+
+const inf = useInf();
+
 defineProps({
   organization: Object,
+});
+
+const detailsBtnLabel = ref({
+  bn: "বিস্তারিত",
+  en: "Details",
 });
 
 function getShortDesc(desc) {

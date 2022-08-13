@@ -8,7 +8,7 @@
           <label
             for="name"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Name
+            >{{ labels.name[inf.lang] }}
           </label>
           <input
             disabled
@@ -24,7 +24,7 @@
           <label
             for="name"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Description
+            >{{ labels.description[inf.lang] }}
           </label>
           <textarea
             rows="3"
@@ -39,7 +39,9 @@
         <div class="mt-6">
           <SwitchGroup>
             <div class="w-full flex flex-row items-center justify-between">
-              <SwitchLabel class="mr-4">Auto Approve</SwitchLabel>
+              <SwitchLabel class="mr-4">{{
+                labels.autoApprove[inf.lang]
+              }}</SwitchLabel>
               <Switch
                 v-model="orgInfo.autoApprove"
                 :class="orgInfo.autoApprove ? 'bg-blue-600' : 'bg-gray-200'"
@@ -58,7 +60,9 @@
         <div class="mt-6">
           <SwitchGroup>
             <div class="flex flex-row items-center justify-between">
-              <SwitchLabel class="mr-4">Require Membership Code</SwitchLabel>
+              <SwitchLabel class="mr-4">{{
+                labels.code[inf.lang]
+              }}</SwitchLabel>
               <Switch
                 v-model="orgInfo.requireCode"
                 :class="orgInfo.requireCode ? 'bg-blue-600' : 'bg-gray-200'"
@@ -77,7 +81,7 @@
         <div class="mt-6">
           <SwitchGroup>
             <div class="flex flex-row items-center justify-between">
-              <SwitchLabel class="mr-4">Require NID</SwitchLabel>
+              <SwitchLabel class="mr-4">{{ labels.nid[inf.lang] }}</SwitchLabel>
               <Switch
                 v-model="orgInfo.requireNID"
                 :class="orgInfo.requireNID ? 'bg-blue-600' : 'bg-gray-200'"
@@ -110,12 +114,37 @@ import { useRouter } from "vue-router";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
 import api from "../api";
 import Loading from "../components/Loading.vue";
+import { useInf } from "../stores/inf";
 
 const user = useUserStore();
+const inf = useInf();
 const router = useRouter();
 
 const orgInfo = ref({});
 const loading = ref(false);
+
+const labels = ref({
+  name: {
+    bn: "নাম",
+    en: "Name",
+  },
+  description: {
+    bn: "বর্ণনা",
+    en: "Description",
+  },
+  autoApprove: {
+    bn: "Auto Approve",
+    en: "Auto Approve",
+  },
+  code: {
+    bn: "মেম্বারশিপ কোড ?",
+    en: "Require Membership Code",
+  },
+  nid: {
+    bn: "জাতীয় পরিচয় পত্র ?",
+    en: "Require NID",
+  },
+});
 
 const updateBtnLabel = ref("Update");
 

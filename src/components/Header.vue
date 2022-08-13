@@ -33,7 +33,9 @@
         <Btn @click="navSettings"
           ><font-awesome-icon icon="gear" />
 
-          <span class="hidden md:inline ml-2">Organization Settings</span>
+          <span class="hidden md:inline ml-2">{{
+            orgSettingsLabel[inf.lang]
+          }}</span>
         </Btn>
       </div>
       <div class="mx-2" v-if="user.role === user.adminRole">
@@ -69,6 +71,11 @@ const loginModalKey = ref(0);
 const btnLabel = ref({
   bn: "লগ ইন",
   en: "Log in",
+});
+
+const orgSettingsLabel = ref({
+  bn: "সেটিংস",
+  en: "Settings",
 });
 
 function login() {

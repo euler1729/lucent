@@ -194,8 +194,8 @@ const labels = ref({
       toggleBtn2: "Register an Organization",
     },
     bn: {
-      modal: "লগিন করুন",
-      submitBtn: "লগিন করুন",
+      modal: "লগইন করুন",
+      submitBtn: "লগইন করুন",
       toggleBtn: "রেজিস্ট্রেশন করুন",
       toggleBtn2: "Organization রেজিস্ট্রেশন করুন",
     },
@@ -212,7 +212,7 @@ const labels = ref({
     bn: {
       modal: "অ্যাকাউন্ট খুলুন",
       submitBtn: "রেজিস্ট্রেশন করুন",
-      toggleBtn: "লগিন করুন",
+      toggleBtn: "লগইন করুন",
       toggleBtn2: "Organization রেজিস্ট্রেশন করুন",
     },
     toggleTo: "login",
@@ -228,7 +228,7 @@ const labels = ref({
     bn: {
       modal: "Create an account",
       submitBtn: "Organization রেজিস্ট্রেশন করুন",
-      toggleBtn: "লগিন করুন",
+      toggleBtn: "লগইন করুন",
       toggleBtn2: "রেজিস্ট্রেশন করুন",
     },
     toggleTo: "login",

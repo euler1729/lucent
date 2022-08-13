@@ -83,11 +83,11 @@ function verifyAccount() {
         })
         .then((response) => {
           user.setUser(response.data);
+          emit("onsuccess");
         })
         .catch((err) => {
           user.logout();
         });
-      emit("onsuccess");
     })
     .catch((err) => {
       console.log(err);

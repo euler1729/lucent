@@ -7,7 +7,7 @@
           <label
             for="name"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Name
+            >{{ labels.name[inf.lang] }}
           </label>
           <input
             type="text"
@@ -22,7 +22,7 @@
           <label
             for="name"
             class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-            >Phone
+            >{{ labels.phone[inf.lang] }}
           </label>
           <input
             disabled
@@ -37,7 +37,9 @@
         <div class="mt-6">
           <SwitchGroup>
             <div class="w-full flex flex-row items-center justify-between">
-              <SwitchLabel class="mr-4">Verified</SwitchLabel>
+              <SwitchLabel class="mr-4">{{
+                labels.verified[inf.lang]
+              }}</SwitchLabel>
               <Switch
                 v-model="verified"
                 :class="verified ? 'bg-blue-600' : 'bg-gray-200'"
@@ -53,7 +55,7 @@
         </div>
       </div>
       <div>
-        <Btn class="mt-6" @click="logout">{{ logoutBtlLabel }}</Btn>
+        <Btn class="mt-6" @click="logout">{{ labels.logout[inf.lang] }}</Btn>
       </div>
     </div>
   </DefaultLayout>
@@ -66,12 +68,34 @@ import { onMounted, ref } from "vue";
 import { useUserStore } from "../stores/user.js";
 import { useRouter } from "vue-router";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
+import { useInf } from "../stores/inf";
+
+const inf = useInf();
 const user = useUserStore();
 const router = useRouter();
 
 const name = ref(user.name);
 const phone = ref(user.phone);
 const verified = user.verified;
+
+const labels = ref({
+  name: {
+    bn: "নাম ",
+    en: "Name",
+  },
+  phone: {
+    bn: "ফোন ",
+    en: "Phone",
+  },
+  verified: {
+    bn: "ভেরিফাইড ",
+    en: "Verified",
+  },
+  logout: {
+    bn: "লগ আউট ",
+    en: "Log out",
+  },
+});
 
 const logoutBtlLabel = ref("Log out");
 

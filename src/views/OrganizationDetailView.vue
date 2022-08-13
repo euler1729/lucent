@@ -1,5 +1,5 @@
 <template>
-  <Loading v-if="loading" msg="Loading Organization" />
+  <Loading v-if="loading" :msg="loadingLabel" />
   <DefaultLayout>
     <div
       class="px-10 py-10 grid grid-flow-row grid-cols-1 md:grid-cols-3 gap-4"
@@ -17,15 +17,17 @@
           class="flex flex-row items-center justify-center self-center"
         >
           <Btn @click="navMembershipRequest" class="mr-2">
-            <font-awesome-icon class="mr-2" icon="user-group" /> Membership
-            Requests
+            <font-awesome-icon class="mr-2" icon="user-group" />
+            {{ label.membershipRequests[inf.lang] }}
           </Btn>
           <Btn @click="spend">
-            <font-awesome-icon class="mr-2" icon="hand-holding-heart" /> Spend
+            <font-awesome-icon class="mr-2" icon="hand-holding-heart" />
+            {{ label.spend[inf.lang] }}
           </Btn>
         </div>
         <Btn v-else @click="donate" class="self-center">
-          <font-awesome-icon class="mr-2" icon="paper-plane" /> Donate
+          <font-awesome-icon class="mr-2" icon="paper-plane" />
+          {{ label.donate[inf.lang] }}
         </Btn>
       </div>
 
@@ -33,7 +35,7 @@
       <div
         class="col-end-0 mt-6 py-6 flex flex-col items-center justify-center bg-slate-200/10 shadow-lg rounded-md md:mx-24 h-full"
       >
-        <div class="font-semibold">Top Donations</div>
+        <div class="font-semibold">{{ label.topDonation[inf.lang] }}</div>
         <div
           class="w-48 mb-4 mt-2 px-20 border-purple-500 border-b-2 rounded-lg"
         ></div>
@@ -55,7 +57,9 @@
           <div
             class="w-full md:mx-10 border-blue-500 border-b-2 rounded-md"
           ></div>
-          <div class="px-8 text-xl font-semibold">Spendings</div>
+          <div class="px-8 text-xl font-semibold">
+            {{ label.spendings[inf.lang] }}
+          </div>
           <div
             class="w-full md:mx-10 border-blue-500 border-b-2 rounded-md"
           ></div>
@@ -77,7 +81,7 @@
       <div
         class="col-end-0 mt-6 py-6 flex flex-col items-center justify-center bg-slate-200/10 shadow-lg rounded-md md:mx-24 h-full"
       >
-        <div class="font-semibold">Latest Donations</div>
+        <div class="font-semibold">{{ label.latestDonations[inf.lang] }}</div>
         <div
           class="w-48 mb-4 mt-2 px-20 border-cyan-500 border-b-2 rounded-lg"
         ></div>
@@ -130,7 +134,7 @@
   />
   <VerifyPhone
     :isOpen="verifyPhoneModal"
-    @onsuccess="donate"
+    @onsuccess="handleVerifyPhone"
     :key="verifyPhoneModalKey"
   />
 </template>
@@ -149,8 +153,10 @@ import Donation from "../components/Donation.vue";
 import Spending from "../components/Spending.vue";
 import VerifyPhone from "../components/VerifyPhone.vue";
 import { useUserStore } from "../stores/user";
+import { useInf } from "../stores/inf";
 
 const user = useUserStore();
+const inf = useInf();
 const route = useRoute();
 const router = useRouter();
 
@@ -173,6 +179,7 @@ const spendingModal = ref(false);
 const spendingModalKey = ref(0);
 const verifyPhoneModal = ref(false);
 const verifyPhoneModalKey = ref(0);
+const loadingLabel = ref("Loading");
 
 const membership = ref({
   checked: false,
@@ -182,6 +189,36 @@ const membership = ref({
   approved: false,
 });
 
+const label = {
+  donate: {
+    bn: "ডোনেট",
+    en: "Donate",
+  },
+  spend: {
+    bn: "খরচ করুন",
+    en: "Spend",
+  },
+  membershipRequests: {
+    bn: "মেম্বারশিপ অনুরোধ ",
+    en: "Membership Requests",
+  },
+  donate: {
+    bn: "ডোনেট",
+    en: "Donate",
+  },
+  topDonation: {
+    bn: "সর্বোচ্চ ডোনেশন",
+    en: "Top Donations",
+  },
+  latestDonations: {
+    bn: "Latest ডোনেশন",
+    en: "Latest Donations",
+  },
+  spendings: {
+    bn: "খরচ",
+    en: "Spendings",
+  },
+};
 onMounted(() => {
   loadOrg();
 });
@@ -221,6 +258,7 @@ function loadTopDonations() {
 
 function loadOrg() {
   loading.value = true;
+  loadingLabel.value = "Loading Organization Information";
   api
     .get(`/org/det/${route.params.id}`)
     .then((response) => {
@@ -274,6 +312,7 @@ function checkMembership(counter) {
   if (counter < 2) {
     membership.value.checked = false;
     loading.value = true;
+    loadingLabel.value = "Loading Membership Information";
     api
       .get(`/membership/check/${route.params.id}`, {
         headers: {
@@ -326,6 +365,7 @@ function onMemberShipRequest() {
 }
 
 function donate() {
+  console.log(user.verified);
   if (!user.loggedIn) {
     loginModal.value = true;
     loginModalKey.value = Math.random();
@@ -375,6 +415,13 @@ function donationSuccess() {
   spendingModal.value = false;
   spendingModalKey.value = Math.random();
   loadOrg(0);
+}
+
+function handleVerifyPhone() {
+  // verifyPhoneModal.value = false;
+  // verifyPhoneModalKey.value = Math.random();
+
+  donate();
 }
 
 function navMembershipRequest() {
