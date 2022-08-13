@@ -62,6 +62,8 @@ import Login from "./Login.vue";
 import EmailVerificationAlert from "./EmailVerificationAlert.vue";
 import { useUserStore } from "../stores/user.js";
 import { useRouter } from "vue-router";
+import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
+
 const user = useUserStore();
 const router = useRouter();
 const inf = useInf();

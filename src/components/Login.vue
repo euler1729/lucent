@@ -17,7 +17,7 @@
               type="text"
               name="name"
               id="name"
-              v-model="name"
+              v-model="orgName"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               :placeholder="labels.inputLabel.orgName[inf.lang]"
               required
@@ -33,7 +33,7 @@
               type="text"
               name="name"
               id="name"
-              v-model="name"
+              v-model="orgDesc"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
               :placeholder="labels.inputLabel.orgDesc[inf.lang]"
               required
@@ -172,12 +172,12 @@ const labels = ref({
 
     orgName: {
       en: "Organization Name",
-      bn: "পাসওয়ার্ড",
+      bn: "অর্গানাইজেশন নাম",
     },
 
     orgDesc: {
       en: "Organization Description",
-      bn: "পাসওয়ার্ড",
+      bn: "অর্গানাইজেশন বর্ণনা",
     },
 
     or: {
