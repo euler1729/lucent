@@ -84,9 +84,11 @@ public class OrganizationController {
             @RequestParam("phone") String phone,
             @RequestParam("password") String password,
             @RequestParam("profilePic") MultipartFile profilePic,
+            @RequestParam("coverPic") MultipartFile coverPic,
             HttpServletRequest request) throws DuplicatePhoneException, IOException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/org/registration").toUriString());
 
+        //        Create an account for manager
         AppUserRequest appUserRequest = new AppUserRequest();
         appUserRequest.setPhone(phone);
         appUserRequest.setName(name);
@@ -94,12 +96,18 @@ public class OrganizationController {
         AppUserResponse savedUserResponse = appUserService.saveUser(appUserRequest, appUserService.getRole("ROLE_MANAGER"), this.getSiteURL(request));
         AppUser savedUser = appUserService.getUser(savedUserResponse.phone);
 
+        //        Create the organization
         OrganizationRequest organizationRequest = new OrganizationRequest();
         organizationRequest.setName(orgName);
         organizationRequest.setDescription(orgDescription);
+
         organizationRequest.setProfilePic(profilePic.getBytes());
         organizationRequest.setProfilePicName(profilePic.getOriginalFilename());
         organizationRequest.setProfilePicType(profilePic.getContentType());
+
+        organizationRequest.setCoverPic(coverPic.getBytes());
+        organizationRequest.setCoverPicName(coverPic.getOriginalFilename());
+        organizationRequest.setCoverPicType(coverPic.getContentType());
         OrganizationResponse savedOrganization = organizationService.saveOrganization(organizationRequest, savedUser, this.getSiteURL(request));
 
         return ResponseEntity.created(uri).body(savedOrganization);

@@ -31,9 +31,13 @@ public class Organization {
     private String description;
 
     private String profilePicURL;
+    private String coverPicURL;
 
     @OneToOne
     private Image profilePic;
+
+    @OneToOne
+    private Image coverPic;
 
     private Boolean autoApprove = false;
     private Boolean requireCode = false;

@@ -17,7 +17,12 @@ public class OrganizationRequest {
 
     @NotNull(message = "You must select a profile picture.")
     private byte[] profilePic;
-
     private String profilePicName;
     private String profilePicType;
+
+    @NotNull(message = "You must select a cover picture.")
+    private byte[] coverPic;
+    private String coverPicName;
+    private String coverPicType;
+
 }

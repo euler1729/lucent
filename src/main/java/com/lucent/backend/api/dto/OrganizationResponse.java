@@ -23,6 +23,7 @@ public class OrganizationResponse {
 
     public Boolean published;
     public String profilePicURL;
+    public String coverPicURL;
 
     public OrganizationResponse(Organization organization){
         this.id = organization.getId();
@@ -35,5 +36,6 @@ public class OrganizationResponse {
         this.manager = new AppUserShort(organization.getManager().getId(), organization.getManager().getName());
         this.published = organization.isPublished();
         this.profilePicURL = organization.getProfilePicURL();
+        this.coverPicURL = organization.getCoverPicURL();
     }
 }

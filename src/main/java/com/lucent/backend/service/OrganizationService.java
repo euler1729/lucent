@@ -42,17 +42,25 @@ public class OrganizationService {
      */
     public OrganizationResponse saveOrganization(OrganizationRequest organizationRequest, AppUser manager, String siteurl){
 
-        Image image = imageRepo.save(Image.builder()
+        Image proPic = imageRepo.save(Image.builder()
                         .name(organizationRequest.getProfilePicName())
                         .image(organizationRequest.getProfilePic())
                         .type(organizationRequest.getProfilePicType())
                 .build());
 
+        Image coverPic = imageRepo.save(Image.builder()
+                .name(organizationRequest.getCoverPicName())
+                .image(organizationRequest.getCoverPic())
+                .type(organizationRequest.getCoverPicType())
+                .build());
+
         Organization organization = new Organization();
         organization.setName(organizationRequest.getName());
         organization.setDescription(organizationRequest.getDescription());
-        organization.setProfilePic(image);
-        organization.setProfilePicURL(siteurl + "/images/" + image.getName());
+        organization.setProfilePic(proPic);
+        organization.setProfilePicURL(siteurl + "/images/" + proPic.getName());
+        organization.setCoverPic(coverPic);
+        organization.setCoverPicURL(siteurl + "/images/" + coverPic.getName());
         organization.setManager(manager);
 
         return new OrganizationResponse(organizationRepo.save(organization));
