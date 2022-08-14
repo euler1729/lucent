@@ -1,6 +1,7 @@
 package com.lucent.backend.service;
 
 import com.lucent.backend.Repo.ImageRepo;
+import com.lucent.backend.Repo.MembershipRepo;
 import com.lucent.backend.Repo.OrganizationRepo;
 import com.lucent.backend.Util.ImageUtil;
 import com.lucent.backend.api.Exception.ResourceNotFound;
@@ -9,6 +10,7 @@ import com.lucent.backend.api.dto.OrganizationRequest;
 import com.lucent.backend.api.dto.OrganizationResponse;
 import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.domain.Image;
+import com.lucent.backend.domain.Membership;
 import com.lucent.backend.domain.Organization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.file.AccessDeniedException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +37,8 @@ public class OrganizationService {
     @Autowired
     ImageRepo imageRepo;
 
+    @Autowired private MembershipRepo membershipRepo;
+
     /**
      * Saves an organization and adds manager
      * @param organizationRequest An OrganizationRequest object
@@ -42,14 +47,21 @@ public class OrganizationService {
      */
     public OrganizationResponse saveOrganization(OrganizationRequest organizationRequest, AppUser manager, String siteurl){
 
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new java.util.Date());
+        String profilepicname = organizationRequest.getProfilePicName().replaceAll("\\s", "");
+        String coverpicname = organizationRequest.getCoverPicName().replaceAll("\\s", "");
+
+        profilepicname = timeStamp + profilepicname;
+        coverpicname = timeStamp + coverpicname;
+
         Image proPic = imageRepo.save(Image.builder()
-                        .name(organizationRequest.getProfilePicName())
+                        .name(profilepicname)
                         .image(organizationRequest.getProfilePic())
                         .type(organizationRequest.getProfilePicType())
                 .build());
 
         Image coverPic = imageRepo.save(Image.builder()
-                .name(organizationRequest.getCoverPicName())
+                .name(coverpicname)
                 .image(organizationRequest.getCoverPic())
                 .type(organizationRequest.getCoverPicType())
                 .build());
@@ -58,10 +70,18 @@ public class OrganizationService {
         organization.setName(organizationRequest.getName());
         organization.setDescription(organizationRequest.getDescription());
         organization.setProfilePic(proPic);
-        organization.setProfilePicURL(siteurl + "/images/" + proPic.getName());
+        organization.setProfilePicURL(siteurl + "/images/" + profilepicname);
         organization.setCoverPic(coverPic);
-        organization.setCoverPicURL(siteurl + "/images/" + coverPic.getName());
+        organization.setCoverPicURL(siteurl + "/images/" + coverpicname);
         organization.setManager(manager);
+
+        Membership membership = Membership.builder()
+                .donor(manager)
+                .organization(organization)
+                .approved(true)
+                .build();
+
+        Membership savedMemberhip = membershipRepo.save(membership);
 
         return new OrganizationResponse(organizationRepo.save(organization));
     }
@@ -181,5 +201,26 @@ public class OrganizationService {
         else{
             throw new ResourceNotFound("Organization not found of this id.");
         }
+    }
+
+    /**
+     * Returns donors organization
+     * @param donor Appuser
+     * @param page page no
+     * @param size size
+     * @param sortBy sort by field
+     * @return List of OrganizationResponse
+     */
+    public List<OrganizationResponse> myOrganization(AppUser donor, int page, int size, String sortBy){
+        Pageable paging = PageRequest.of(page, size, Sort.by(sortBy));
+        List<Membership> memberships = membershipRepo.findAllByApprovedIsTrueAndDonor(donor, paging);
+
+        List<OrganizationResponse> organizationResponses =new ArrayList<>();
+
+        memberships.forEach(membership -> {
+            organizationResponses.add(new OrganizationResponse(membership.getOrganization()));
+        });
+
+        return organizationResponses;
     }
 }

@@ -19,7 +19,7 @@ public interface MembershipRepo extends PagingAndSortingRepository<Membership, L
     List<Membership> findAllByOrganization(Organization Organization, Pageable pageable);
     List<Membership> findAllByOrganizationAndApprovedIsTrue(Organization Organization, Pageable pageable);
     List<Membership> findAllByOrganizationAndApprovedIsFalse(Organization Organization, Pageable pageable);
-
+    List<Membership> findAllByApprovedIsTrueAndDonor(AppUser donor, Pageable pageable);
     Optional<Membership> findByDonorAndOrganization(AppUser donor, Organization organization);
 
     @Modifying @Transactional

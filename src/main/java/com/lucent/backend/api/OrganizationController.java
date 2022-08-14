@@ -4,6 +4,7 @@ import com.lucent.backend.api.Exception.DuplicatePhoneException;
 import com.lucent.backend.api.Exception.ResourceNotFound;
 import com.lucent.backend.api.dto.*;
 import com.lucent.backend.domain.AppUser;
+import com.lucent.backend.domain.Organization;
 import com.lucent.backend.service.AppUserService;
 import com.lucent.backend.service.ImageService;
 import com.lucent.backend.service.OrganizationService;
@@ -234,5 +235,17 @@ public class OrganizationController {
         Map<String, Boolean> status = new HashMap<>();
         status.put("status", organizationService.updateOrg(id, (String) auth.getPrincipal(), form.getDescription(), form.getAutoApprove(), form.getRequireCode(), form.getRequireNID()));
         return ResponseEntity.ok().body(status);
+    }
+
+    @Operation(summary = "My Organizations")
+    @ApiResponse(responseCode = "200", description = "My Organizations | Open for donor and manager only")
+    @GetMapping("/org/my")
+    public ResponseEntity<List<OrganizationResponse>> myOrganizations(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(defaultValue = "id") String sortBy
+    ){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return ResponseEntity.ok().body(organizationService.myOrganization(appUserService.getUser((String) auth.getPrincipal()), page, size, sortBy));
     }
 }
