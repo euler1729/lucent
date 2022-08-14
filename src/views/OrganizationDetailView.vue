@@ -1,15 +1,32 @@
 <template>
   <Loading v-if="loading" :msg="loadingLabel" />
   <DefaultLayout>
+    <!-- Cover Photo -->
+    <div class="flex flex-col md:mx-20 items-center">
+      <div
+        class="w-full h-64 md:h-96 md:rounded-lg self-center my-4 md:my-0 bg-cover bg-center"
+        :style="'background-image: url(' + orgInfo.coverPicURL + ');'"
+      ></div>
+    </div>
     <div
-      class="px-10 py-10 grid grid-flow-row grid-cols-1 md:grid-cols-3 gap-4"
+      class="px-10 py-10 grid grid-flow-row grid-cols-1 md:grid-cols-3 gap-4 font-body"
     >
       <!-- Organiztion Info -->
       <div class="md:px-10 col-span-2 row-span-1 flex flex-col items-start">
-        <div class="text-xl font-bold py-4">{{ orgInfo.name }}</div>
-        <div>{{ orgInfo.description }}</div>
-        <div class="py-4 text-xl font-semibold">
-          Balance: {{ orgInfo.balance }} /-
+        <div class="flex flex-row items-start">
+          <div>
+            <div class="w-52 h-52 rounded-lg self-center my-4 md:my-0">
+              <img class="rounded-lg" :src="orgInfo.profilePicURL" />
+            </div>
+          </div>
+          <div class="ml-10 flex flex-col items-start h-full md:mt-4">
+            <div class="text-3xl font-bold my-4 md:my-0">
+              {{ orgInfo.name }}
+            </div>
+            <div class="mt-2 md:mt-8 font-semibold text-lg">
+              {{ orgInfo.description }}
+            </div>
+          </div>
         </div>
 
         <div
@@ -25,28 +42,45 @@
             {{ label.spend[inf.lang] }}
           </Btn>
         </div>
-        <Btn v-else @click="donate" class="self-center">
-          <font-awesome-icon class="mr-2" icon="paper-plane" />
-          {{ label.donate[inf.lang] }}
-        </Btn>
+
+        <div
+          v-else
+          class="mt-10 md:px-10 flex flex-col md:flex-row items-center md:justify-between md w-full"
+        >
+          <div class="py-4 text-2xl font-semibold text-darkblue">
+            Balance: {{ orgInfo.balance }} /-
+          </div>
+          <Btn @click="donate" class="self-center">
+            <font-awesome-icon class="mr-2" icon="paper-plane" />
+            {{ label.donate[inf.lang] }}
+          </Btn>
+        </div>
       </div>
 
       <!-- Top Donations -->
       <div
-        class="col-end-0 mt-6 py-6 flex flex-col items-center justify-center bg-slate-200/10 shadow-lg rounded-md md:mx-24 h-full"
+        class="col-end-0 mt-6 py-6 flex flex-col items-center justify-center bg-white/70 shadow-lg rounded-md md:mx-24 h-full"
       >
-        <div class="font-semibold">{{ label.topDonation[inf.lang] }}</div>
+        <div class="text-xl font-semibold">
+          {{ label.topDonation[inf.lang] }}
+        </div>
         <div
-          class="w-48 mb-4 mt-2 px-20 border-purple-500 border-b-2 rounded-lg"
+          class="w-48 mb-4 mt-2 px-20 border-purple1 border-b-2 rounded-lg"
         ></div>
 
         <div
-          class="w-full py-1 px-10 flex flex-row items-center justify-between"
+          class="w-full text-lg py-1 px-10 flex flex-row items-center justify-between"
           v-for="(donation, index) in topDonation"
           :key="donation.id"
         >
           <div>{{ index + 1 }}. {{ donation.donor.name }}</div>
           <div>{{ donation.amount }} /-</div>
+        </div>
+        <div
+          @click="navDonations"
+          class="text-sm underline font-semibold text-gray-500 mt-4 cursor-pointer"
+        >
+          All Donations
         </div>
       </div>
       <!-- Spendings -->
@@ -55,17 +89,17 @@
       >
         <div class="py-6 w-full flex flex-row items-center justify-center">
           <div
-            class="w-full md:mx-10 border-blue-500 border-b-2 rounded-md"
+            class="w-full md:mx-10 border-purple2 border-b-2 rounded-md"
           ></div>
           <div class="px-8 text-xl font-semibold">
             {{ label.spendings[inf.lang] }}
           </div>
           <div
-            class="w-full md:mx-10 border-blue-500 border-b-2 rounded-md"
+            class="w-full md:mx-10 border-purple2 border-b-2 rounded-md"
           ></div>
         </div>
         <div>
-          <div v-for="spending in spendings" :key="spending.id">
+          <div class="text-lg" v-for="spending in spendings" :key="spending.id">
             {{ spending.amount }} /- | {{ spending.description }}
           </div>
           <div
@@ -79,15 +113,17 @@
 
       <!-- Latest Donations -->
       <div
-        class="col-end-0 mt-6 py-6 flex flex-col items-center justify-center bg-slate-200/10 shadow-lg rounded-md md:mx-24 h-full"
+        class="col-end-0 mt-6 py-6 flex flex-col items-center justify-center bg-white/70 shadow-lg rounded-md md:mx-24 h-full"
       >
-        <div class="font-semibold">{{ label.latestDonations[inf.lang] }}</div>
+        <div class="text-xl font-semibold">
+          {{ label.latestDonations[inf.lang] }}
+        </div>
         <div
-          class="w-48 mb-4 mt-2 px-20 border-cyan-500 border-b-2 rounded-lg"
+          class="w-48 mb-4 mt-2 px-20 border-purple1 border-b-2 rounded-lg"
         ></div>
 
         <div
-          class="w-full py-1 px-10 flex flex-row items-center justify-between"
+          class="w-full text-lg py-1 px-10 flex flex-row items-center justify-between"
           v-for="(donation, index) in latestDonation"
           :key="donation.id"
         >
