@@ -42,6 +42,7 @@ public class Organization {
     private Boolean requireNID = false;
 
     private Double balance = 0.0;
+    private Double totalSpending = 0.0;
     private Long memberCount = 0L;
 
     private boolean published = false;

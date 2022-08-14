@@ -95,7 +95,7 @@ public class SpendingService {
                             collectedAmount += collectDonation(spending, toCollectAmount, collectedAmount);
                             System.out.println("collectedAmount = " + collectedAmount);
                         }
-
+                        organizationRepo.increaseSpending(collectedAmount, organization.get().getId());
                         return spending;
                     }
                     else{

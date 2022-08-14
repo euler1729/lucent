@@ -19,6 +19,7 @@ public class OrganizationResponse {
     public String description;
     public Boolean autoApprove, requireCode, requireNID;
     public Double balance;
+    public Double spent;
     public AppUserShort manager;
 
     public Boolean published;
@@ -32,6 +33,7 @@ public class OrganizationResponse {
         this.description = organization.getDescription();
         this.memberCount = organization.getMemberCount();
         this.balance = organization.getBalance();
+        this.spent = organization.getTotalSpending();
         this.autoApprove = organization.getAutoApprove();
         this.requireCode = organization.getRequireCode();
         this.requireNID = organization.getRequireNID();
