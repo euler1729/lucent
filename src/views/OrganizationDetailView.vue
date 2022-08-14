@@ -44,13 +44,16 @@
         </div>
 
         <div
-          v-else
           class="mt-10 md:px-10 flex flex-col md:flex-row items-center md:justify-between md w-full"
         >
           <div class="py-4 text-2xl font-semibold text-darkblue">
             Balance: {{ orgInfo.balance }} /-
           </div>
-          <Btn @click="donate" class="self-center">
+          <Btn
+            v-if="user.role != user.managerRole && orgManagerId != user.id"
+            @click="donate"
+            class="self-center"
+          >
             <font-awesome-icon class="mr-2" icon="paper-plane" />
             {{ label.donate[inf.lang] }}
           </Btn>
@@ -59,14 +62,16 @@
 
       <!-- Top Donations -->
       <div
-        class="col-end-0 mt-6 py-6 flex flex-col items-center justify-center bg-white/70 shadow-lg rounded-md md:mx-24 h-full"
+        class="col-end-0 mt-6 py-6 flex flex-col items-center justify-evenly bg-white/70 shadow-lg rounded-md md:mx-24 h-full"
       >
-        <div class="text-xl font-semibold">
-          {{ label.topDonation[inf.lang] }}
+        <div>
+          <div class="text-xl font-semibold text-center">
+            {{ label.topDonation[inf.lang] }}
+          </div>
+          <div
+            class="w-48 mb-4 mt-2 px-20 border-purple1 border-b-2 rounded-lg"
+          ></div>
         </div>
-        <div
-          class="w-48 mb-4 mt-2 px-20 border-purple1 border-b-2 rounded-lg"
-        ></div>
 
         <div
           class="w-full text-lg py-1 px-10 flex flex-row items-center justify-between font-semibold"
@@ -113,14 +118,17 @@
 
       <!-- Latest Donations -->
       <div
-        class="col-end-0 mt-6 py-6 flex flex-col items-center justify-center bg-white/70 shadow-lg rounded-md md:mx-24 h-full"
+        class="col-end-0 mt-6 py-6 flex flex-col items-center justify-evenly bg-white/70 shadow-lg rounded-md md:mx-24 h-full"
       >
-        <div class="text-xl font-semibold">
-          {{ label.latestDonations[inf.lang] }}
+        <div>
+          <div class="text-xl font-semibold text-center">
+            {{ label.latestDonations[inf.lang] }}
+          </div>
+
+          <div
+            class="w-48 mb-4 mt-2 px-20 border-purple1 border-b-2 rounded-lg"
+          ></div>
         </div>
-        <div
-          class="w-48 mb-4 mt-2 px-20 border-purple1 border-b-2 rounded-lg"
-        ></div>
 
         <div
           class="w-full text-lg py-1 px-10 flex flex-row items-center font-body font-semibold justify-between"

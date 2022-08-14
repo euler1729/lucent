@@ -2,8 +2,14 @@
   <div
     class="flex items-center py-2 px-4 bg-emerald-200 dark:bg-emerald-700 text-sm"
   >
-    <div class="mr-2">Your phone is not verified.</div>
-    <Btn @click="handleVerify"> {{ label }} </Btn>
+    <div class="mr-2 text-lg">Your phone is not verified.</div>
+    <button
+      type="button"
+      class="font-bold text-lg bg-darkblue p-2 rounded text-white"
+      @click="handleVerify"
+    >
+      {{ label }}
+    </button>
   </div>
 
   <VerifyPhone :isOpen="isOpen" :key="openKey" />

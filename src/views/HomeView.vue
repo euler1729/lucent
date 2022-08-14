@@ -26,7 +26,10 @@
       </div>
     </div>
     <!-- My Organization -->
-    <div class="flex flex-row items-center justify-between px-10">
+    <div
+      v-if="myorgs.length > 0"
+      class="flex flex-row items-center justify-between px-10"
+    >
       <div class="text-xl font-semibold text-darkblue">My Organizations</div>
       <button
         type="button"
@@ -39,7 +42,7 @@
     <div
       class="flex flex-row items-center justify-evenly md:justify-start flex-wrap"
     >
-      <div v-for="org in orgs" :key="org.id" class="mt-10 mx-6">
+      <div v-for="org in myorgs" :key="org.id" class="mt-10 mx-6">
         <OrgThumb
           @click="navOrg(org.id)"
           v-if="org.id != 2"
@@ -73,24 +76,70 @@
 import DefaultLayout from "../layout/Default.vue";
 import OrgThumb from "../components/OrgThumb.vue";
 import api from "../api";
-
-import { ref } from "vue";
+import { useUserStore } from "../stores/user";
+import { ref, watch } from "vue";
 import { onMounted } from "@vue/runtime-core";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+const user = useUserStore();
 const orgs = ref([]);
+const myorgs = ref([]);
 
 onMounted(() => {
   loadOrganizations();
+  if (user.loggedIn) loadMyOrganizations(0);
 });
+
+watch(
+  () => user.loggedIn,
+  (val) => {
+    if (val) loadMyOrganizations(0);
+  }
+);
 
 function navOrg(id) {
   router.push(`/org/${id}`);
 }
 
+function loadMyOrganizations(counter) {
+  if (counter < 2) {
+    api
+      .get("/org/my", {
+        headers: {
+          AUTHORIZATION: `Bearer ${user.access_token}`,
+        },
+      })
+      .then((response) => {
+        myorgs.value = response.data;
+      })
+      .catch((err) => {
+        if (err.response.status == 403) {
+          // refresh token
+          api
+            .get("/token/refresh", {
+              headers: {
+                AUTHORIZATION: `Bearer ${user.refresh_token}`,
+              },
+            })
+            .then((refreshResponse) => {
+              user.setToken(
+                refreshResponse.data.access_token,
+                refreshResponse.data.refresh_token
+              );
+              loadMyOrganizations(counter + 1);
+            })
+            .catch((err) => {
+              user.logout();
+              loading.value = false;
+            });
+        }
+      });
+  }
+}
+
 function loadOrganizations() {
-  api.get("/org/published?page=0&size=3&sortBy=name").then((response) => {
+  api.get("/org/published?page=0&size=20&sortBy=name").then((response) => {
     orgs.value = response.data;
   });
 }

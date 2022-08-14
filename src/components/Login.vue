@@ -137,6 +137,7 @@ import Modal from "./Modal.vue";
 import { useInf } from "../stores/inf.js";
 import api from "../api.js";
 import { useUserStore } from "../stores/user.js";
+import router from "../router";
 
 const inf = useInf();
 const user = useUserStore();
@@ -301,38 +302,41 @@ function registration() {
 }
 
 function orgRegistration() {
-  loginerror.value = false;
-  labels.value["orgRegistration"][inf.lang].submitBtn = "Creating Organization";
-  api
-    .post("/org/registration", {
-      orgName: orgName.value,
-      orgDescription: orgDesc.value,
-      name: name.value,
-      phone: phone.value,
-      password: password.value,
-    })
-    .then((response) => {
-      login();
-      labels.value["orgRegistration"][inf.lang].submitBtn =
-        "Organization Created";
-    })
-    .catch((err) => {
-      for (let key in err.response.data) {
-        errlabel.value = err.response.data[key];
-      }
-      loginerror.value = true;
-      labels.value["orgRegistration"][inf.lang].submitBtn =
-        "Create Organization";
-    });
+  // loginerror.value = false;
+  // labels.value["orgRegistration"][inf.lang].submitBtn = "Creating Organization";
+  // api
+  //   .post("/org/registration", {
+  //     orgName: orgName.value,
+  //     orgDescription: orgDesc.value,
+  //     name: name.value,
+  //     phone: phone.value,
+  //     password: password.value,
+  //   })
+  //   .then((response) => {
+  //     login();
+  //     labels.value["orgRegistration"][inf.lang].submitBtn =
+  //       "Organization Created";
+  //   })
+  //   .catch((err) => {
+  //     for (let key in err.response.data) {
+  //       errlabel.value = err.response.data[key];
+  //     }
+  //     loginerror.value = true;
+  //     labels.value["orgRegistration"][inf.lang].submitBtn =
+  //       "Create Organization";
+  //   });
+  router.push({ name: "orgreg" });
 }
 
 function processSubmission() {
   if (actionMode.value == "login") login();
   else if (actionMode.value == "registration") registration();
-  else if (actionMode.value == "orgRegistration") orgRegistration();
+  else if (actionMode.value == "orgRegistration")
+    router.push({ name: "orgreg" });
 }
 
 function toggleMode(toggleTo) {
-  actionMode.value = toggleTo;
+  if (toggleTo == "orgRegistration") router.push({ name: "orgreg" });
+  else actionMode.value = toggleTo;
 }
 </script>

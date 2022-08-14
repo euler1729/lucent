@@ -46,7 +46,8 @@ export const useUserStore = defineStore({
       this.verified = true;
       this.role = "";
       localStorage.removeItem("refresh_token");
-      router.push({ name: "home" });
+      console.log("Loading");
+      location.reload();
     },
   },
 });
