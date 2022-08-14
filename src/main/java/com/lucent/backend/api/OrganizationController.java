@@ -77,7 +77,7 @@ public class OrganizationController {
                             schema = @Schema(implementation = OrganizationResponse.class)) }),
             @ApiResponse(responseCode = "400", description = "Duplicate Phone Number"),
     })
-    @PostMapping("/org/registration")
+    @PostMapping(value="/org/registration")
     public ResponseEntity<OrganizationResponse> registerOrg(
             @RequestParam("orgName") String orgName,
             @RequestParam("orgDescription") String orgDescription,
@@ -88,7 +88,7 @@ public class OrganizationController {
             @RequestParam("coverPic") MultipartFile coverPic,
             HttpServletRequest request) throws DuplicatePhoneException, IOException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/org/registration").toUriString());
-
+        System.out.println(profilePic);
         //        Create an account for manager
         AppUserRequest appUserRequest = new AppUserRequest();
         appUserRequest.setPhone(phone);
