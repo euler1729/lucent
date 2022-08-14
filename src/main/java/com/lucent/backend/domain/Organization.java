@@ -30,6 +30,11 @@ public class Organization {
     @Column(nullable = false, length = 1023)
     private String description;
 
+    private String profilePicURL;
+
+    @OneToOne
+    private Image profilePic;
+
     private Boolean autoApprove = false;
     private Boolean requireCode = false;
     private Boolean requireNID = false;

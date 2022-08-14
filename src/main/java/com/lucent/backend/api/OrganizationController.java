@@ -2,12 +2,10 @@ package com.lucent.backend.api;
 
 import com.lucent.backend.api.Exception.DuplicatePhoneException;
 import com.lucent.backend.api.Exception.ResourceNotFound;
-import com.lucent.backend.api.dto.AppUserRequest;
-import com.lucent.backend.api.dto.AppUserResponse;
-import com.lucent.backend.api.dto.OrganizationRequest;
-import com.lucent.backend.api.dto.OrganizationResponse;
+import com.lucent.backend.api.dto.*;
 import com.lucent.backend.domain.AppUser;
 import com.lucent.backend.service.AppUserService;
+import com.lucent.backend.service.ImageService;
 import com.lucent.backend.service.OrganizationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,10 +20,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
@@ -35,6 +35,7 @@ import java.util.Map;
 @Data @AllArgsConstructor
 class OrganizationRegistrationForm{
     private String phone, name, password, orgName, orgDescription;
+    private MultipartFile image;
 }
 
 @Data @AllArgsConstructor
@@ -47,6 +48,8 @@ class OrganizationUpdateForm{
 public class OrganizationController {
     private final OrganizationService organizationService;
     private final AppUserService appUserService;
+
+    private final ImageService imageService;
 
     /**
      * Retrieve site url domain
@@ -61,7 +64,7 @@ public class OrganizationController {
 
     /**
      * Registers an organization with its manager
-     * @param form OrganizationRegistrationForm object - Consists of phone, name, password, orgName, orgDescription;
+//     * @param form OrganizationRegistrationForm object - Consists of phone, name, password, orgName, orgDescription;
      * @param request A HttpServletRequest object
      * @return Saved User Response
      * @throws DuplicatePhoneException if user already exists with given email
@@ -74,20 +77,30 @@ public class OrganizationController {
             @ApiResponse(responseCode = "400", description = "Duplicate Phone Number"),
     })
     @PostMapping("/org/registration")
-    public ResponseEntity<OrganizationResponse> registerOrg(@RequestBody @Valid OrganizationRegistrationForm form, HttpServletRequest request) throws DuplicatePhoneException {
+    public ResponseEntity<OrganizationResponse> registerOrg(
+            @RequestParam("orgName") String orgName,
+            @RequestParam("orgDescription") String orgDescription,
+            @RequestParam("name") String name,
+            @RequestParam("phone") String phone,
+            @RequestParam("password") String password,
+            @RequestParam("profilePic") MultipartFile profilePic,
+            HttpServletRequest request) throws DuplicatePhoneException, IOException {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/org/registration").toUriString());
 
         AppUserRequest appUserRequest = new AppUserRequest();
-        appUserRequest.setPhone(form.getPhone());
-        appUserRequest.setName(form.getName());
-        appUserRequest.setPassword(form.getPassword());
+        appUserRequest.setPhone(phone);
+        appUserRequest.setName(name);
+        appUserRequest.setPassword(password);
         AppUserResponse savedUserResponse = appUserService.saveUser(appUserRequest, appUserService.getRole("ROLE_MANAGER"), this.getSiteURL(request));
         AppUser savedUser = appUserService.getUser(savedUserResponse.phone);
 
         OrganizationRequest organizationRequest = new OrganizationRequest();
-        organizationRequest.setName(form.getOrgName());
-        organizationRequest.setDescription(form.getOrgDescription());
-        OrganizationResponse savedOrganization = organizationService.saveOrganization(organizationRequest, savedUser);
+        organizationRequest.setName(orgName);
+        organizationRequest.setDescription(orgDescription);
+        organizationRequest.setProfilePic(profilePic.getBytes());
+        organizationRequest.setProfilePicName(profilePic.getOriginalFilename());
+        organizationRequest.setProfilePicType(profilePic.getContentType());
+        OrganizationResponse savedOrganization = organizationService.saveOrganization(organizationRequest, savedUser, this.getSiteURL(request));
 
         return ResponseEntity.created(uri).body(savedOrganization);
     }
@@ -214,6 +227,4 @@ public class OrganizationController {
         status.put("status", organizationService.updateOrg(id, (String) auth.getPrincipal(), form.getDescription(), form.getAutoApprove(), form.getRequireCode(), form.getRequireNID()));
         return ResponseEntity.ok().body(status);
     }
-
-
 }

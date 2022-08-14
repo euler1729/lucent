@@ -1,9 +1,11 @@
 package com.lucent.backend.api.dto;
 
+import com.lucent.backend.Util.ImageUtil;
 import com.lucent.backend.domain.Organization;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
@@ -20,6 +22,8 @@ public class OrganizationResponse {
     public AppUserShort manager;
 
     public Boolean published;
+    public String profilePicURL;
+
     public OrganizationResponse(Organization organization){
         this.id = organization.getId();
         this.name = organization.getName();
@@ -30,5 +34,6 @@ public class OrganizationResponse {
         this.requireNID = organization.getRequireNID();
         this.manager = new AppUserShort(organization.getManager().getId(), organization.getManager().getName());
         this.published = organization.isPublished();
+        this.profilePicURL = organization.getProfilePicURL();
     }
 }

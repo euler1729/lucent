@@ -1,11 +1,14 @@
 package com.lucent.backend.service;
 
+import com.lucent.backend.Repo.ImageRepo;
 import com.lucent.backend.Repo.OrganizationRepo;
+import com.lucent.backend.Util.ImageUtil;
 import com.lucent.backend.api.Exception.ResourceNotFound;
 import com.lucent.backend.api.dto.AppUserResponse;
 import com.lucent.backend.api.dto.OrganizationRequest;
 import com.lucent.backend.api.dto.OrganizationResponse;
 import com.lucent.backend.domain.AppUser;
+import com.lucent.backend.domain.Image;
 import com.lucent.backend.domain.Organization;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,8 @@ public class OrganizationService {
 
     @Autowired
     private OrganizationRepo organizationRepo;
+    @Autowired
+    ImageRepo imageRepo;
 
     /**
      * Saves an organization and adds manager
@@ -35,11 +40,19 @@ public class OrganizationService {
      * @param manager An AppUser object
      * @return saved organization as OrganizationResponse
      */
-    public OrganizationResponse saveOrganization(OrganizationRequest organizationRequest, AppUser manager){
+    public OrganizationResponse saveOrganization(OrganizationRequest organizationRequest, AppUser manager, String siteurl){
+
+        Image image = imageRepo.save(Image.builder()
+                        .name(organizationRequest.getProfilePicName())
+                        .image(organizationRequest.getProfilePic())
+                        .type(organizationRequest.getProfilePicType())
+                .build());
 
         Organization organization = new Organization();
         organization.setName(organizationRequest.getName());
         organization.setDescription(organizationRequest.getDescription());
+        organization.setProfilePic(image);
+        organization.setProfilePicURL(siteurl + "/images/" + image.getName());
         organization.setManager(manager);
 
         return new OrganizationResponse(organizationRepo.save(organization));
