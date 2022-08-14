@@ -32,4 +32,13 @@ public interface OrganizationRepo extends PagingAndSortingRepository<Organizatio
     @Modifying @Transactional
     @Query("UPDATE Organization set balance=:balance where id=:id")
     void setBalance(Double balance, Long id);
+
+    @Modifying @Transactional
+    @Query("UPDATE Organization set memberCount=memberCount+1 where id=:id")
+    void incrementMember(Long id);
+
+    @Modifying @Transactional
+    @Query("UPDATE Organization set memberCount=memberCount-1 where id=:id")
+    void decrementMember(Long id);
+
 }

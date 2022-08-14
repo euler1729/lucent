@@ -32,10 +32,8 @@ public class Organization {
 
     private String profilePicURL;
     private String coverPicURL;
-
     @OneToOne
     private Image profilePic;
-
     @OneToOne
     private Image coverPic;
 

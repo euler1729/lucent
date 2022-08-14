@@ -75,6 +75,8 @@ public class MembershipService {
             if(membership.get().getOrganization().isPublished()) {
                 if (membership.get().getOrganization().getManager() == requestingUser) {
                     membershipRepo.changeApproval(approval, membershipId);
+                    if(approval) organizationRepo.incrementMember(membership.get().getOrganization().getId());
+                    else organizationRepo.decrementMember(membership.get().getOrganization().getId());
                     return true;
                 } else {
                     throw new AccessDeniedException("Only organization manager can approve");

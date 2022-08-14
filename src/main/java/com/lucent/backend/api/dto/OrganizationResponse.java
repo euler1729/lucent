@@ -25,10 +25,12 @@ public class OrganizationResponse {
     public String profilePicURL;
     public String coverPicURL;
 
+    public Long memberCount;
     public OrganizationResponse(Organization organization){
         this.id = organization.getId();
         this.name = organization.getName();
         this.description = organization.getDescription();
+        this.memberCount = organization.getMemberCount();
         this.balance = organization.getBalance();
         this.autoApprove = organization.getAutoApprove();
         this.requireCode = organization.getRequireCode();

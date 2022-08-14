@@ -68,6 +68,23 @@ public class MembershipController {
     }
 
     /**
+     * Bans/Unapproves a membership request | Accessible by manager
+     * @param id organization id
+     * @return status
+     * @throws AccessDeniedException if organization id is invalid
+     * @throws ResourceNotFound if the request user in not the membership request's organizer's manager
+     */
+    @Operation(summary = "Approves membership request")
+    @ApiResponse(responseCode = "200", description = "Returns status")
+    @PutMapping("/membership/unapprove/{id}")
+    public ResponseEntity<Map<String, Boolean>> unapproveMembership(@PathVariable Long id) throws AccessDeniedException, ResourceNotFound {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Map<String, Boolean> status = new HashMap<>();
+        status.put("status", membershipService.changeMembershipApproval(id, appUserService.getUser((String) auth.getPrincipal()), false));
+        return ResponseEntity.ok().body(status) ;
+    }
+
+    /**
      * Returns approved membership | Accessible by all
      * @param organizationId organization id
      * @param page page no
