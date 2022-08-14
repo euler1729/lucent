@@ -1,6 +1,6 @@
 <template>
   <Modal :isOpen="isOpen" title="Account Verification" :key="openKey">
-    <div class="relative bg-white rounded-lg dark:bg-gray-700 font-bangla">
+    <div class="relative bg-white rounded-lg dark:bg-gray-700">
       <div class="pb-6 dark:text-gray-300">
         Please enter the code sent to you phone to verify your account.
       </div>

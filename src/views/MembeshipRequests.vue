@@ -59,7 +59,7 @@
     </div></DefaultLayout
   >
   <Modal :isOpen="isOpen" title="Membership Approval" :key="isOpenKey">
-    <div class="relative bg-white rounded-lg dark:bg-gray-700 font-bangla">
+    <div class="relative bg-white rounded-lg dark:bg-gray-700">
       <div class="pb-6 px-4 dark:text-gray-300">
         Do you want to accept the membership request?
       </div>

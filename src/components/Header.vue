@@ -1,14 +1,14 @@
 <template>
   <EmailVerificationAlert v-if="user.loggedIn && user.verified == false" />
-  <div class="flex flex-row items-center justify-between px-4 py-2">
+  <div class="flex flex-row items-center justify-between px-4 bg-bg py-4">
     <div
       @click="gotoHome"
-      class="cursor-pointer font-display italic underline font-semibold text-xl md:text-2xl"
+      class="cursor-pointer font-display text-4xl md:text-5xl"
     >
       Lucent
     </div>
     <div class="flex flex-row items-center">
-      <div
+      <!-- <div
         @click="toggleLanguage"
         class="cursor-pointer mx-2 text-xl md:text-2xl"
       >
@@ -16,14 +16,13 @@
       </div>
       <div @click="toggleTheme" class="cursor-pointer mx-2 text-xl md:text-2xl">
         <font-awesome-icon icon="moon" />
-      </div>
-      <div class="mx-2">
-        <Btn @click="login"
-          ><font-awesome-icon icon="user" />
-          <span v-if="user.loggedIn" class="hidden sm:inline ml-2 font-bangla">
+      </div> -->
+      <div>
+        <Btn @click="login">
+          <span v-if="user.loggedIn">
             {{ user.name }}
           </span>
-          <span v-else class="hidden sm:inline ml-2 font-bangla">
+          <span v-else>
             {{ btnLabel[inf.lang] }}
           </span></Btn
         >

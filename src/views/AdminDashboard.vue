@@ -68,7 +68,7 @@
     title="Membership Approval"
     :key="publishModalKey"
   >
-    <div class="relative bg-white rounded-lg dark:bg-gray-700 font-bangla">
+    <div class="relative bg-white rounded-lg dark:bg-gray-700">
       <div class="pb-6 px-4 dark:text-gray-300">
         Do you want to publish the organization?
       </div>
@@ -83,7 +83,7 @@
     title="Membership Approval"
     :key="unpublishModalKey"
   >
-    <div class="relative bg-white rounded-lg dark:bg-gray-700 font-bangla">
+    <div class="relative bg-white rounded-lg dark:bg-gray-700">
       <div class="pb-6 px-4 dark:text-gray-300">
         Do you want to ban/unpublish the organization?
       </div>

@@ -1,6 +1,6 @@
 <template>
   <Modal :isOpen="isOpen" :key="modalKey" title="Donation">
-    <div class="relative bg-white rounded-lg dark:bg-gray-700 font-bangla">
+    <div class="relative bg-white rounded-lg dark:bg-gray-700">
       <div class="pb-6 px-4">
         <form
           v-if="donationSuccesful == false"

@@ -1,6 +1,6 @@
 <template>
   <Modal :isOpen="isOpen" title="Membership">
-    <div class="relative bg-white rounded-lg dark:bg-gray-700 font-bangla">
+    <div class="relative bg-white rounded-lg dark:bg-gray-700">
       <div class="pb-6 px-4">
         <form class="space-y-6" @submit.prevent="processSubmission(0)">
           <div v-if="props.orgInfo.requireCode">

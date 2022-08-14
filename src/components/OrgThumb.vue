@@ -1,20 +1,19 @@
 <template>
   <div
-    class="w-64 h-48 shadow-lg md:shadow-2xl shadow-blue-500/20 md:shadow-blue-500/20 rounded-lg border-2 border-slate-500 dark:border-white flex flex-col items-center justify-between"
+    class="font-body flex flex-col md:flex-row bg-white shadow-xl rounded-lg px-4 py-4"
   >
-    <div
-      class="h-12 w-full flex flex-col items-center justify-center border-b-2 border-slate-500 dark:border-white text-xl md:text-2xl font-semibold"
-    >
-      {{ organization.name }}
+    <!-- Profile Picture -->
+    <div class="w-52 h-52 rounded-lg self-center my-4 md:my-0">
+      <img class="rounded-lg" :src="organization.profilePicURL" />
     </div>
 
-    <div class="px-4 py-4 flex flex-col items-center justify-evenly">
-      <div>
+    <!-- Information -->
+    <div class="flex flex-col items-center justify-between py-2 px-10">
+      <div class="text-3xl font-bold my-4 md:my-0">{{ organization.name }}</div>
+      <div class="font-semibold text-lg w-64 my-4 md:my-0">
         {{ getShortDesc(organization.description) }}
       </div>
-    </div>
-    <div class="mb-2 font-bangla">
-      <Btn>{{ detailsBtnLabel[inf.lang] }}</Btn>
+      <Btn class="my-4 md:my-0">Donate</Btn>
     </div>
   </div>
 </template>
@@ -36,8 +35,8 @@ const detailsBtnLabel = ref({
 });
 
 function getShortDesc(desc) {
-  let shortDesc = desc.substring(0, 77);
-  if (desc.length > 77) shortDesc += "...";
+  let shortDesc = desc.substring(0, 50);
+  if (desc.length > 50) shortDesc += "...";
   return shortDesc;
 }
 </script>

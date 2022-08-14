@@ -1,6 +1,6 @@
 <template>
   <Modal :isOpen="isOpen" title="Membership Approval" :key="openKey">
-    <div class="relative bg-white rounded-lg dark:bg-gray-700 font-bangla">
+    <div class="relative bg-white rounded-lg dark:bg-gray-700">
       <div class="pb-6 px-4 dark:text-gray-300">
         Your membership is pending. You'll be notified when your membership
         request is accepted.
