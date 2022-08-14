@@ -4,13 +4,13 @@
     :key="modalKey"
     :title="labels[actionMode][inf.lang].modal"
   >
-    <div class="relative bg-white rounded-lg dark:bg-gray-700">
+    <div class="relative bg-white rounded-lg dark:bg-gray-700 font-body">
       <div class="pb-6 px-4">
         <form class="space-y-6" @submit.prevent="processSubmission">
           <div v-if="actionMode == 'orgRegistration'">
             <label
               for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              class="block mb-2 text-lg font-medium text-black/80"
               >{{ labels.inputLabel.orgName[inf.lang] }}</label
             >
             <input
@@ -18,7 +18,7 @@
               name="name"
               id="name"
               v-model="orgName"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              class="bg-darkblue/20 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 px-5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400"
               :placeholder="labels.inputLabel.orgName[inf.lang]"
               required
             />
@@ -26,7 +26,7 @@
           <div v-if="actionMode == 'orgRegistration'">
             <label
               for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              class="block mb-2 text-lg font-medium text-black/80"
               >{{ labels.inputLabel.orgDesc[inf.lang] }}</label
             >
             <input
@@ -34,7 +34,7 @@
               name="name"
               id="name"
               v-model="orgDesc"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              class="bg-darkblue/20 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 px-5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400"
               :placeholder="labels.inputLabel.orgDesc[inf.lang]"
               required
             />
@@ -46,7 +46,7 @@
           >
             <label
               for="name"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              class="block mb-2 text-lg font-medium text-black/80"
               >{{ labels.inputLabel.name[inf.lang] }}</label
             >
             <input
@@ -54,7 +54,7 @@
               name="name"
               id="name"
               v-model="name"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              class="bg-darkblue/20 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 px-5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400"
               placeholder="Your name"
               required
             />
@@ -62,7 +62,7 @@
           <div>
             <label
               for="phone"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              class="block mb-2 text-lg font-medium text-black/80"
               >{{ labels.inputLabel.phone[inf.lang] }}</label
             >
             <input
@@ -70,7 +70,7 @@
               name="phone"
               id="phone"
               v-model="phone"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              class="bg-darkblue/20 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 px-5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400"
               placeholder="01*********"
               required
             />
@@ -78,7 +78,7 @@
           <div>
             <label
               for="password"
-              class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+              class="block mb-2 text-lg font-medium text-black/80"
               >{{ labels.inputLabel.password[inf.lang] }}</label
             >
             <input
@@ -87,34 +87,37 @@
               id="password"
               v-model="password"
               placeholder="••••••••"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+              class="bg-darkblue/20 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 px-5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400"
               required
             />
           </div>
-          <div class="flex justify-center" v-if="loginerror">
+          <div
+            class="flex justify-center items-center w-full"
+            v-if="loginerror"
+          >
             <div class="flex items-center"></div>
             <span href="#" class="text-sm text-red-500">{{ errlabel }}</span>
           </div>
-          <button
-            type="submit"
-            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            {{ labels[actionMode][inf.lang].submitBtn }}
-          </button>
+          <div class="flex justify-center items-center w-full">
+            <button
+              type="submit"
+              class="text-white text-xl bg-gradient-to-r from-purple1 to-purple2 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple1/50 dark:shadow-lg dark:shadow-purple2/80 font-semibold font-inter rounded-lg px-5 py-2.5 text-center mb-2"
+            >
+              {{ labels[actionMode][inf.lang].submitBtn }}
+            </button>
+          </div>
           <div
             class="flex flex-row items-center text-gray-500 dark:text-gray-300"
           ></div>
 
-          <div class="flex flex-row items-center justify-center">
+          <div class="flex flex-row items-center justify-center font-semibold">
             <div
               @click="toggleMode(labels[actionMode].toggleTo)"
               class="mr-2 underline text-blue-400 cursor-pointer flex flex-col items-center justify-center"
             >
               {{ labels[actionMode][inf.lang].toggleBtn }}
             </div>
-            <span class="text-white dark:text-white">{{
-              labels.inputLabel.or[inf.lang]
-            }}</span>
+            <span class="font-bold">{{ labels.inputLabel.or[inf.lang] }}</span>
             <div
               @click="toggleMode(labels[actionMode].toggleTo2)"
               class="ml-2 underline text-blue-400 cursor-pointer flex flex-col items-center justify-center"

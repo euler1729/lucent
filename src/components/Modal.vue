@@ -32,7 +32,7 @@
               >
                 <DialogTitle
                   as="h3"
-                  class="text-lg text-black dark:text-white font-medium leading-6 mb-5 text-center"
+                  class="text-2xl mb-10 mt-2 text-black dark:text-white font-semibold font-body leading-6 text-center"
                 >
                   {{ props.title }}
                 </DialogTitle>
