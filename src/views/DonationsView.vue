@@ -10,7 +10,7 @@
           class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
         >
           <thead
-            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+            class="text-lg text-white text-gray-700 bg-darkblue dark:text-gray-400"
           >
             <tr>
               <th scope="col" class="py-3 px-6">Donor Name</th>
@@ -22,7 +22,7 @@
             <tr
               v-for="donation in latestDonation"
               :key="donation.id"
-              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
+              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 text-lg"
             >
               <th
                 scope="row"

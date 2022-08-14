@@ -1,12 +1,12 @@
 <template>
   <DefaultLayout>
-    <div class="flex flex-col items-center">
+    <div class="flex flex-col items-center text-xl font-body font-semibold">
       <div class="grid md:w-3/4 grid-cols-1 mx-10 my-10">
         <!-- Name -->
         <div>
           <label
             for="name"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            class="block mb-2 text-xl font-body font-semibold text-gray-900 dark:text-gray-300"
             >{{ labels.name[inf.lang] }}
           </label>
           <input
@@ -14,14 +14,15 @@
             name="name"
             id="name"
             v-model="name"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white px-6"
+            class="bg-white border-2 shadow-lg border-darkblue text-gray-900 text-xl font-body font-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white px-6"
+            disabled
           />
         </div>
         <!-- phone -->
         <div class="mt-6">
           <label
             for="name"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            class="block mb-2 text-xl font-body font-semibold text-gray-900 dark:text-gray-300"
             >{{ labels.phone[inf.lang] }}
           </label>
           <input
@@ -29,7 +30,7 @@
             name="phone"
             id="phone"
             v-model="phone"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white px-6"
+            class="bg-white border-2 shadow-lg border-darkblue text-gray-900 text-xl font-body font-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white px-6"
           />
         </div>
 
@@ -42,8 +43,8 @@
               }}</SwitchLabel>
               <Switch
                 v-model="verified"
-                :class="verified ? 'bg-blue-600' : 'bg-gray-200'"
-                class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                :class="verified ? 'bg-darkblue' : 'bg-darkblue'"
+                class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-darkblue focus:ring-offset-2"
               >
                 <span
                   :class="verified ? 'translate-x-6' : 'translate-x-1'"

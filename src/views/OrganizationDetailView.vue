@@ -69,7 +69,7 @@
         ></div>
 
         <div
-          class="w-full text-lg py-1 px-10 flex flex-row items-center justify-between"
+          class="w-full text-lg py-1 px-10 flex flex-row items-center justify-between font-semibold"
           v-for="(donation, index) in topDonation"
           :key="donation.id"
         >
@@ -123,13 +123,13 @@
         ></div>
 
         <div
-          class="w-full text-lg py-1 px-10 flex flex-row items-center justify-between"
+          class="w-full text-lg py-1 px-10 flex flex-row items-center font-body font-semibold justify-between"
           v-for="(donation, index) in latestDonation"
           :key="donation.id"
         >
           <div>
             <div>{{ index + 1 }}. {{ donation.donor.name }}</div>
-            <div class="text-sm font-medium">
+            <div class="text-sm font-semibold">
               {{ getTimeDiff(donation.created) }}
             </div>
           </div>

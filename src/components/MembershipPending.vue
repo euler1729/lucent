@@ -5,8 +5,9 @@
         Your membership is pending. You'll be notified when your membership
         request is accepted.
       </div>
-
-      <Btn class="text-center" @click="closeModal">Ok</Btn>
+      <div class="flex flex-row items-center justify-center">
+        <Btn class="text-center" @click="closeModal">Ok</Btn>
+      </div>
     </div>
   </Modal>
 </template>

@@ -17,6 +17,20 @@
       <div @click="toggleTheme" class="cursor-pointer mx-2 text-xl md:text-2xl">
         <font-awesome-icon icon="moon" />
       </div> -->
+      <!-- <div>
+        <Btn @click="login">
+          <span v-if="user.loggedIn">
+            {{ user.name }}
+          </span>
+          <span v-else>
+            {{ btnLabel[inf.lang] }}
+          </span></Btn
+        >
+      </div> -->
+
+      <!-- Menu -->
+    </div>
+    <div class="dropdown">
       <div>
         <Btn @click="login">
           <span v-if="user.loggedIn">
@@ -27,25 +41,33 @@
           </span></Btn
         >
       </div>
+      <div v-if="user.loggedIn" class="dropdown-content">
+        <div>
+          <div>
+            <Btn @click="login"> My Profile </Btn>
+          </div>
+        </div>
+        <div v-if="user.role === user.managerRole">
+          <Btn @click="navSettings">
+            <span class="md:inline">{{ orgSettingsLabel[inf.lang] }}</span>
+          </Btn>
+        </div>
+        <div v-if="user.role === user.adminRole">
+          <Btn @click="navAdminDashboard">
+            <span class="md:inline">Dashboard </span>
+          </Btn>
+        </div>
+        <!-- <div>
+          <Btn @click="login"> Donations </Btn>
+        </div> -->
 
-      <div class="mx-2" v-if="user.role === user.managerRole">
-        <Btn @click="navSettings"
-          ><font-awesome-icon icon="gear" />
-
-          <span class="hidden md:inline ml-2">{{
-            orgSettingsLabel[inf.lang]
-          }}</span>
-        </Btn>
-      </div>
-      <div class="mx-2" v-if="user.role === user.adminRole">
-        <Btn @click="navAdminDashboard"
-          ><font-awesome-icon icon="gear" />
-
-          <span class="hidden md:inline ml-2">Dashboard </span>
-        </Btn>
+        <div>
+          <Btn @click="user.logout"> Log Out</Btn>
+        </div>
       </div>
     </div>
   </div>
+
   <Login
     :isOpen="loginModal"
     @onsuccess="afterLoginSuccess"
@@ -62,6 +84,7 @@ import EmailVerificationAlert from "./EmailVerificationAlert.vue";
 import { useUserStore } from "../stores/user.js";
 import { useRouter } from "vue-router";
 import { Switch, SwitchGroup, SwitchLabel } from "@headlessui/vue";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 
 const user = useUserStore();
 const router = useRouter();
@@ -127,3 +150,21 @@ function navAdminDashboard() {
   router.push({ name: "adminDashboard" });
 }
 </script>
+
+<style scoped>
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 170px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+</style>

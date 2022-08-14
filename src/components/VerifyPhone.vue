@@ -29,7 +29,7 @@
         <div class="flex flex-row items-center justify-center">
           <button
             type="submit"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            class="text-white text-xl bg-gradient-to-r from-purple1 to-purple2 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple1/50 dark:shadow-lg dark:shadow-purple2/80 font-semibold font-inter rounded-lg px-5 py-2.5 text-center mb-2"
           >
             {{ btnLabel }}
           </button>

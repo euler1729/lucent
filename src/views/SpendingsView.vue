@@ -10,10 +10,10 @@
           class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
         >
           <thead
-            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+            class="text-lg text-gray-700 bg-darkblue text-white dark:text-gray-400"
           >
             <tr>
-              <th scope="col" class="py-3 px-6">Donor Name</th>
+              <th scope="col" class="py-3 px-6">Description</th>
               <th scope="col" class="py-3 px-6">Amount</th>
               <th scope="col" class="py-3 px-6">Time</th>
             </tr>
@@ -22,7 +22,7 @@
             <tr
               v-for="spending in latestSpendings"
               :key="spending.id"
-              class="bg-white border-b dark:bg-gray-900 dark:border-gray-700"
+              class="bg-white text-lg border-b dark:bg-gray-900 dark:border-gray-700"
             >
               <th
                 scope="row"

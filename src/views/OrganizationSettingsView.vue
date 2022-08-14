@@ -2,12 +2,14 @@
   <Loading v-if="loading" msg="Getting Organization" />
   <DefaultLayout>
     <div class="flex flex-col items-center">
-      <div class="grid md:w-3/4 grid-cols-1 mx-10 my-10">
+      <div
+        class="grid md:w-3/4 grid-cols-1 mx-10 my-10 font-semibold text-lg font-body"
+      >
         <!-- Name -->
         <div>
           <label
             for="name"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            class="block mb-2 text-xl font-body font-semibold text-gray-900 dark:text-gray-300"
             >{{ labels.name[inf.lang] }}
           </label>
           <input
@@ -16,14 +18,14 @@
             name="name"
             id="name"
             v-model="orgInfo.name"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white px-6"
+            class="bg-white border-2 shadow-lg border-darkblue/60 text-gray-900 text-xl font-body font-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white px-6"
           />
         </div>
         <!-- description -->
         <div class="mt-6">
           <label
             for="name"
-            class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+            class="block mb-2 text-xl font-body font-semibold text-gray-900 dark:text-gray-300"
             >{{ labels.description[inf.lang] }}
           </label>
           <textarea
@@ -32,7 +34,7 @@
             name="description"
             id="description"
             v-model="orgInfo.description"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white px-6"
+            class="bg-white border-2 shadow-lg border-darkblue/70 text-gray-900 text-xl font-body font-semibold rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white px-6"
           />
         </div>
         <!-- Auto Approve -->
@@ -44,7 +46,7 @@
               }}</SwitchLabel>
               <Switch
                 v-model="orgInfo.autoApprove"
-                :class="orgInfo.autoApprove ? 'bg-blue-600' : 'bg-gray-200'"
+                :class="orgInfo.autoApprove ? 'bg-darkblue' : 'bg-darkblue'"
                 class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 <span
@@ -65,7 +67,7 @@
               }}</SwitchLabel>
               <Switch
                 v-model="orgInfo.requireCode"
-                :class="orgInfo.requireCode ? 'bg-blue-600' : 'bg-gray-200'"
+                :class="orgInfo.requireCode ? 'bg-darkblue' : 'bg-darkblue'"
                 class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 <span
@@ -84,7 +86,7 @@
               <SwitchLabel class="mr-4">{{ labels.nid[inf.lang] }}</SwitchLabel>
               <Switch
                 v-model="orgInfo.requireNID"
-                :class="orgInfo.requireNID ? 'bg-blue-600' : 'bg-gray-200'"
+                :class="orgInfo.requireNID ? 'bg-darkblue' : 'bg-darkblue'"
                 class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 <span

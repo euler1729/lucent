@@ -1,4 +1,7 @@
 import { defineStore } from "pinia";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 export const useUserStore = defineStore({
   id: "user",
@@ -43,6 +46,7 @@ export const useUserStore = defineStore({
       this.verified = true;
       this.role = "";
       localStorage.removeItem("refresh_token");
+      router.push({ name: "home" });
     },
   },
 });

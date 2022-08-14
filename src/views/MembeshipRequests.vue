@@ -8,11 +8,9 @@
         class="overflow-x-auto relative shadow-md rounded-lg mt-10 md:w-3/4 self-center w-full"
       >
         <table
-          class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+          class="w-full text-lg text-left text-gray-500 dark:text-gray-400"
         >
-          <thead
-            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
-          >
+          <thead class="text-lg text-white bg-darkblue">
             <tr>
               <th scope="col" class="py-3 px-6">Member Name</th>
               <th scope="col" class="py-3 px-6">Membership Code</th>
