@@ -1,19 +1,10 @@
 <template>
   <DefaultLayout>
     <!-- Hero -->
-    <div class="max-w-screen overflow-hidden" style="height: 48rem">
+    <div class="max-w-screen max-h-min overflow-hidden" style="hero-container">
       <div
-        class="flex flex-row items-center justify-evenly"
-        style="
-          min-height: 48rem;
-          max-height: 48rem;
-          background-image: url(https://cdn.dribbble.com/users/1012997/screenshots/17883184/media/2839a19e60056688c5ee4cb470a7b5f0.png);
-          background-size: contain;
-          background-repeat: no-repeat;
-          background-position: center;
-          overflow-x: hidden;
-          transform: scale(1.4);
-        "
+        class="flex flex-row items-center justify-evenly hero"
+        
       >
         <div></div>
         <div></div>
@@ -40,7 +31,7 @@
     </div>
 
     <div
-      class="flex flex-row items-center justify-evenly md:justify-start flex-wrap"
+      class="flex flex-row items-center justify-evenly flex-wrap"
     >
       <div v-for="org in myorgs" :key="org.id" class="mt-10 mx-6">
         <OrgThumb
@@ -52,18 +43,20 @@
     </div>
 
     <!-- Top organization -->
-    <div class="flex flex-row items-center justify-between px-10 mt-10">
+    <div class="flex flex-row items-center justify-between px-2 md:px-10 mt-10">
       <div class="text-xl font-semibold text-darkblue">Top Organizations</div>
+      <div>
       <button
         type="button"
-        class="text-white bg-darkblue font-semibold font-inter rounded-lg px-5 py-1 text-center mr-2 mb-2"
+        class="text-white bg-darkblue font-semibold font-inter rounded-lg px-5 py-1 text-center mr-2"
       >
         Show all
       </button>
+      </div>
     </div>
 
     <div
-      class="flex flex-row items-center justify-evenly md:justify-start flex-wrap self-center"
+      class="flex flex-row items-center justify-evenly flex-wrap self-center"
     >
       <div v-for="org in orgs" :key="org.id" class="mt-10 mx-6">
         <OrgThumb @click="navOrg(org.id)" :organization="org" />
@@ -144,3 +137,33 @@ function loadOrganizations() {
   });
 }
 </script>
+
+
+<style scoped>
+.hero{
+    min-height: 48rem;
+    max-height: 48rem;
+    background-image: url(https://cdn.dribbble.com/users/1012997/screenshots/17883184/media/2839a19e60056688c5ee4cb470a7b5f0.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow-x: hidden;
+    transform: scale(1.4);
+}
+
+.hero-container{
+  height: 48rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .hero {
+    min-height: 20rem;
+    max-height: 20rem;
+    transform: scale(1);
+
+  }
+  .hero-container{
+  height: 20rem;
+}
+}
+</style>

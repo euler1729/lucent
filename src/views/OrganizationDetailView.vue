@@ -13,7 +13,7 @@
     >
       <!-- Organiztion Info -->
       <div class="md:px-10 col-span-2 row-span-1 flex flex-col items-start">
-        <div class="flex flex-row items-start">
+        <div class="flex flex-col md:flex-row items-center justify-center md:items-start">
           <div>
             <div class="w-52 h-52 rounded-lg self-center my-4 md:my-0">
               <img class="rounded-lg" :src="orgInfo.profilePicURL" />

@@ -246,10 +246,10 @@ function orgRegistration() {
       },
     })
     .then((response) => {
-      login();
-      updateBtnLabel.value = "Organization Created";
+      updateBtnLabel.value = "Organization Created  | Waiting for Admin Approval.";
       errlabel.value = "";
-      router.push({ name: "home" });
+      login();
+      // router.push({ name: "home" });
     })
     .catch((err) => {
       for (let key in err.response.data) {
